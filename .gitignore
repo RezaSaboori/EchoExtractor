@@ -1,0 +1,172 @@
+# Environment variables
+.env
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+#  Usually these files are written by a PyInstaller script; a REAL PyInstaller
+#  script will usually generate some files that are unique to the project, but
+#  source control isn't really the place for them.
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+osx_profile/
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+#   For a library or application, you probably don't want to ignore these,
+#   for example if you use pyenv to manage virtualenvs related to your project.
+.python-version
+
+# Pep8
+.pep8
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Ruff
+.ruff_cache/
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Logs & Reports
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Custom
+# Add any project-specific files or directories that should not be committed
+
+# Data files (if large or sensitive)
+# Example: *.csv
+# Example: *.json (excluding configuration files that SHOULD be versioned)
+# /storage03/Saboori/Echo/Extractor/main_app/CTICI_NCIBB_Echo_Sample.json # If this is too large or sensitive
+# /storage03/Saboori/Echo/Extractor/main_app/echo_extraction/echo_abb_merged_csv.csv # If this is too large or sensitive
+
+# Output directories
+/storage03/Saboori/Echo/Extractor/main_app/final_reports/
+# /storage03/Saboori/Echo/Extractor/main_app/logs/ # Logs are often ignored, but depends on your strategy
+
+# If abbreviations.json is generated and not a source file:
+# /storage03/Saboori/Echo/Extractor/abbreviations.json 

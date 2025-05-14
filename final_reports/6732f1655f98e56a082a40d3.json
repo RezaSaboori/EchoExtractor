@@ -1,0 +1,461 @@
+{
+  "Cardiac_Chambers": {
+    "Left_Ventricle": {
+      "assessment": {
+        "size": "Normal",
+        "systolic_function": "Not Assessed",
+        "diastolic_function": "Not Assessed",
+        "hypertrophy": {
+          "type": "Not Assessed",
+          "severity": "Not Assessed"
+        },
+        "wall_motion_abnormality": {
+          "type": "Not Assessed",
+          "regions": [
+            "Not Assessed"
+          ]
+        },
+        "clot": "Not Assessed",
+        "ash": "Not Assessed"
+      },
+      "measurements": {
+        "ef": {
+          "value": "Not Measured",
+          "method": "Simpson"
+        },
+        "diameter": {
+          "lvedd": "Not Measured",
+          "lvesd": "Not Measured",
+          "ivsd": "Not Measured",
+          "pwd": "Not Measured"
+        },
+        "volumes": {
+          "lvedv": "Not Measured",
+          "lvesv": "Not Measured",
+          "lveddi": "Not Measured",
+          "lvedvi": "Not Measured"
+        },
+        "function_indices": {
+          "fs": "Not Measured",
+          "tei_index": "Not Measured",
+          "dp_dt": "Not Measured",
+          "sphericity_index": "Not Measured"
+        },
+        "strain_measures": {
+          "global_longitudinal_strain": "Not Measured",
+          "longitudinal_strain_4ch": "Not Measured",
+          "longitudinal_strain_2ch": "Not Measured",
+          "longitudinal_strain_apical_long_axis": "Not Measured"
+        },
+        "regional_wall_motion_scores": {
+          "rwmsi": "Not Measured",
+          "rwms": [
+            {
+              "region": "Not Assessed",
+              "score": "Not Measured"
+            }
+          ]
+        },
+        "mass": {
+          "value": "Not Measured"
+        }
+      }
+    },
+    "Right_Ventricle": {
+      "assessment": {
+        "size": "Not Assessed",
+        "systolic_function": "Not Assessed",
+        "hypertrophy": {
+          "presence": "Not Assessed",
+          "severity": "Not Assessed"
+        }
+      },
+      "measurements": {
+        "dimensions": {
+          "mid_rv_diameter": "Not Measured",
+          "longitudinal_rv_diameter": "Not Measured",
+          "rv_thickness": "Not Measured",
+          "rvot_diameter_sax": "Not Measured",
+          "rvot_diameter_plax": "Not Measured"
+        },
+        "areas": {
+          "rved_area": "Not Measured",
+          "rves_area": "Not Measured",
+          "fac": "Not Measured"
+        },
+        "function_indices": {
+          "rv_mpi": "Not Measured",
+          "tapse": "Not Measured",
+          "sm": "Not Measured"
+        }
+      }
+    },
+    "Left_Atrium": {
+      "assessment": {
+        "size": "Not Assessed",
+        "spontaneous_echo_contrast": "Not Assessed",
+        "clot": "Not Assessed",
+        "appendage": {
+          "spontaneous_echo_contrast": "Not Assessed",
+          "clot": "Not Assessed",
+          "closed_in_previous_surgery": "Not Assessed"
+        }
+      },
+      "measurements": {
+        "diameter": "Not Measured",
+        "area": "Not Measured",
+        "volumes": {
+          "biplane_volume": "Not Measured",
+          "volume_4ch_view": "Not Measured",
+          "volume_2ch_view": "Not Measured"
+        },
+        "function_indices": {
+          "la_ef": "Not Measured",
+          "active_ef": "Not Measured",
+          "passive_ef": "Not Measured"
+        },
+        "strain_measures": {
+          "global_strain_2d_ste": "Not Measured"
+        },
+        "appendage": {
+          "velocity": "Not Measured"
+        }
+      }
+    },
+    "Right_Atrium": {
+      "assessment": {
+        "size": "Normal",
+        "spontaneous_echo_contrast": "Not Assessed",
+        "clot": "No",
+        "appendage": {
+          "spontaneous_echo_contrast": "Not Assessed",
+          "clot": "Not Assessed",
+          "closed_in_previous_surgery": "Not Assessed"
+        }
+      },
+      "measurements": {
+        "diameter": "Not Measured",
+        "area": "Not Measured",
+        "volumes": {
+          "volume_4ch_view": "Not Measured"
+        },
+        "function_indices": {
+          "ra_ef": "Not Measured",
+          "active_ef": "Not Measured",
+          "passive_ef": "Not Measured"
+        },
+        "strain_measures": {
+          "global_strain_2d_ste": "Not Measured"
+        },
+        "appendage": {
+          "velocity": "Not Measured"
+        }
+      }
+    }
+  },
+  "Valvular_Apparatus": {
+    "Mitral_Valve": {
+      "assessment": {
+        "shape": "Not Assessed",
+        "sam": "No",
+        "stenosis": {
+          "severity": "Not Assessed"
+        },
+        "regurgitation": {
+          "severity": "No",
+          "paravalvular_leak": "Not Assessed",
+          "transvalvular_leak": "Not Assessed"
+        },
+        "prosthetic": {
+          "present": "Not Assessed",
+          "type": "Not Applicable",
+          "function": "Not Assessed"
+        }
+      },
+      "measurements": {
+        "area": "Not Measured",
+        "dimensions": {
+          "annulus_diameter": "Not Measured",
+          "amvl_length": "Not Measured",
+          "pmvl_length": "Not Measured"
+        },
+        "regurgitation_parameters": {
+          "mr_rv": "Not Measured",
+          "mr_roa": "Not Measured",
+          "mr_vc_area": "Not Measured"
+        },
+        "gradients": {
+          "mean_gradient": "Not Measured",
+          "pht": "Not Measured"
+        },
+        "morpho_functional_indices": {
+          "tenting_area": "Not Measured",
+          "coaptation_depth": "Not Measured",
+          "ivrt": "Not Measured"
+        },
+        "doppler_measurements": {
+          "e_septal": "Not Measured",
+          "e_lateral": "Not Measured",
+          "a": "Not Measured",
+          "s": "Not Measured",
+          "mve": "Not Measured",
+          "vti": "Not Measured",
+          "vp": "Not Measured",
+          "e_a_ratio": "Not Measured",
+          "e_e_prime_ratio": "Not Measured",
+          "deceleration_time": "Not Measured"
+        },
+        "annulus_motion": {
+          "mapse": "Not Measured",
+          "tmad": "Not Measured"
+        }
+      }
+    },
+    "Aortic_Valve": {
+      "assessment": {
+        "shape": "Not Assessed",
+        "stenosis": {
+          "severity": "No"
+        },
+        "regurgitation": {
+          "severity": "Mild",
+          "paravalvular_leak": "Not Assessed",
+          "transvalvular_leak": "Not Assessed"
+        },
+        "prosthetic": {
+          "present": "No",
+          "type": "Not Applicable",
+          "function": "Not Assessed"
+        }
+      },
+      "measurements": {
+        "area": "Not Measured",
+        "regurgitation_parameters": {
+          "ar_rv": "Not Measured",
+          "ar_roa": "Not Measured",
+          "vc": "Not Measured",
+          "ar_pht": "Not Measured"
+        },
+        "gradients": {
+          "peak_velocity": "Not Measured",
+          "lvot_peak_velocity": "Not Measured",
+          "lvot_ao_peak_velocity_ratio": "Not Measured",
+          "pressure_recovery": "Not Measured",
+          "aortic_ppg": "Not Measured",
+          "aortic_mpg": "Not Measured"
+        },
+        "doppler_measurements": {
+          "aortic_vti": "Not Measured",
+          "lvot_vti": "Not Measured"
+        }
+      }
+    },
+    "Pulmonary_Valve": {
+      "assessment": {
+        "shape": "Normal",
+        "stenosis": {
+          "severity": "No"
+        },
+        "regurgitation": {
+          "severity": "Mild",
+          "paravalvular_leak": "Not Assessed",
+          "transvalvular_leak": "Not Assessed"
+        },
+        "prosthetic": {
+          "present": "No",
+          "type": "Not Applicable",
+          "function": "Good Function"
+        }
+      },
+      "measurements": {
+        "dimensions": {
+          "pa_annulus": "Not Measured",
+          "main_pa": "Not Measured",
+          "lpa_diameter": "Not Measured",
+          "rpa_diameter": "Not Measured"
+        },
+        "regurgitation_parameters": {
+          "pr_pht": "Not Measured"
+        },
+        "gradients": {
+          "pv_peak_velocity": "Not Measured",
+          "pv_ppg": "Not Measured",
+          "pv_mpg": "Not Measured"
+        },
+        "doppler_measurements": {
+          "pv_vti": "Not Measured",
+          "rvot_vti": "Not Measured",
+          "pulmonary_acc_time": "Not Measured"
+        },
+        "hemodynamic_pressures": {
+          "mean_pap": "Not Measured",
+          "ra_pressure": "Not Measured",
+          "rvsp": "Not Measured",
+          "pap": "Not Measured"
+        }
+      }
+    },
+    "Tricuspid_Valve": {
+      "assessment": {
+        "shape": "Normal",
+        "stenosis": {
+          "severity": "No"
+        },
+        "regurgitation": {
+          "severity": "Mild",
+          "paravalvular_leak": "Not Assessed",
+          "transvalvular_leak": "Not Assessed"
+        },
+        "prosthetic": {
+          "present": "No",
+          "type": "Not Applicable",
+          "function": "Good Function"
+        }
+      },
+      "measurements": {
+        "dimensions": {
+          "annulus_diameter": "Not Measured",
+          "annulus_area": "Not Measured"
+        },
+        "regurgitation_parameters": {
+          "tr_vc": "Not Measured",
+          "tr_pisa_radius": "Not Measured",
+          "tr_pg": "Not Measured"
+        },
+        "gradients": {
+          "tv_mean_gradient": "Not Measured",
+          "tv_pht": "Not Measured"
+        },
+        "doppler_measurements": {
+          "tv_e_velocity": "Not Measured",
+          "tv_a_velocity": "Not Measured",
+          "tv_ea_ratio": "Not Measured",
+          "tv_deceleration_time": "Not Measured",
+          "e_prime": "Not Measured",
+          "a_prime": "Not Measured",
+          "e_a_prime_ratio": "Not Measured"
+        }
+      }
+    }
+  },
+  "GreatVessels_and_VenousReturn": {
+    "aorta": {
+      "assessment": {
+        "morphology": [
+          {
+            "segment": "Ascending Aorta",
+            "morphology": "Normal"
+          }
+        ],
+        "flow": [],
+        "atherosclerotic_changes": "Not Assessed",
+        "right_sided_aortic_arch": "Not Assessed"
+      },
+      "measurements": {
+        "dimensions": [
+          {
+            "segment": "Ascending Aorta",
+            "diameter": 3.0
+          }
+        ],
+        "distances": {
+          "annulus_to_stj": "Not Measured"
+        }
+      }
+    },
+    "pulmonic_vein": {
+      "assessment": {
+        "venous_drainage": "Not Assessed",
+        "inflow_pattern": "Not Assessed"
+      },
+      "measurements": {
+        "doppler_measurements": {
+          "peak_s_velocity": "Not Measured",
+          "peak_d_velocity": "Not Measured",
+          "peak_ar_velocity": "Not Measured"
+        },
+        "ar_duration": "Not Measured"
+      }
+    },
+    "ivc": {
+      "assessment": {
+        "size": "Normal",
+        "respiratory_variation": ">50%",
+        "ivc_plethora": "Not Assessed",
+        "sniff_test_result": "Not Performed"
+      },
+      "measurements": {
+        "diameter": "Not Measured",
+        "collapsibility_index": "Not Measured"
+      }
+    }
+  },
+  "Congenital_and_Structural_Defects": {
+    "vsd": {
+      "assessment": {
+        "present": "No",
+        "location": "Not Assessed",
+        "size": "Not Assessed",
+        "shunt_direction": "Not Assessed",
+        "aneurysmal_tissue": "Not Assessed",
+        "associated_defects": "Not Assessed"
+      },
+      "measurements": {
+        "diameter": "Not Measured",
+        "peak_gradient": "Not Measured",
+        "qp_qs": "Not Measured"
+      }
+    },
+    "asd": {
+      "assessment": {
+        "present": "No",
+        "type": "Not Assessed",
+        "size": "Not Assessed",
+        "shunt_direction": "Not Assessed",
+        "septal_aneurysm": "Not Assessed",
+        "associated_defects": "None"
+      },
+      "measurements": {
+        "diameter": "Not Measured",
+        "peak_gradient": "Not Measured",
+        "qp_qs": "Not Measured"
+      }
+    },
+    "pfo": {
+      "assessment": {
+        "present": "Not Assessed",
+        "size": "Not Assessed",
+        "shunt_direction": "Not Assessed",
+        "associated_aneurysm": "Not Assessed",
+        "bubble_study": "Not Assessed",
+        "associated_defects": "Not Assessed"
+      },
+      "measurements": {
+        "tunnel_length": "Not Measured",
+        "qp_qs": "Not Measured"
+      }
+    }
+  },
+  "pericardium": {
+    "assessment": {
+      "morphology": "Not Assessed",
+      "effusion": {
+        "presence": "No",
+        "size": "Not Assessed",
+        "distribution": "Not Assessed",
+        "hemodynamic_impact": "Not Assessed"
+      },
+      "constrictive_pericarditis": {
+        "presence": "Not Assessed",
+        "features": []
+      }
+    },
+    "measurements": {
+      "pericardial_thickness": "Not Measured",
+      "effusion_size": {
+        "posterior": "Not Measured",
+        "anterior": "Not Measured"
+      }
+    }
+  }
+}
