@@ -73,22 +73,25 @@ json_parser = JsonOutputParser() if LANGCHAIN_AVAILABLE else JsonOutputParser() 
 
 # ── Prompt Templates ─────────────────────────────────────────────────────────
 
-# Prompt for the main extraction LLM - expects report, feedback, AND schema
-# Modified to accept a specific component schema
+# Prompt for the main extraction LLM - expects report, feedback, schema, AND schema_name
+# Modified to accept a specific component schema and its name
 main_extraction_prompt = PromptTemplate(
-    input_variables=["report", "feedback", "schema"],
+    input_variables=["report", "feedback", "schema", "schema_name"],
     template="""
-You are an AI that extracts *just* the information relevant to the specific component described by the provided JSON schema from an echo-report into a JSON object.
+You are an AI with comprehend knowledge of Cardiology and Echocardiography that extracts *just* the information relevant to the specific component described by the provided JSON schema from an echo-report into a JSON object.
+You are currently extracting data for the {schema_name} component.
 The output must be a valid JSON object that strictly conforms to the expected structure defined by the provided JSON schema.
 Do NOT include any other text before or after the JSON.
+DO NOT infer any information from the report that is not explicitly stated in the schema (for example, if the report says "EF:50%" for a field, do not infer systolic function is normal).
+PAY ATTENTION TO THE UNITS OF THE REPORT AND THE SCHEMA. IF THE UNITS ARE NOT THE SAME, CONVERT THE UNITS TO THE UNITS EXPECTED BY THE SCHEMA.
 
-Echo Report Text:
+**Here is the Echo Report Text:
 ```
 {report}
 ```
 
 ---
-Expected JSON Schema for the specific component (the descriptions and max/min are for your hint only):
+Expected JSON Schema for the {schema_name} component (the descriptions and max/min are for your hint only):
 ```json
 {schema}
 ```
@@ -136,6 +139,7 @@ For each error listed in the details:
 - Generate concise and highly specific feedback for the main AI.
 - Focus on telling the AI *what* was wrong, *where* it was wrong (using the path), and *how* to fix it based on the schema and report text.
 - Hint the agent about the description, possible values, default values, and value types mentioned in the schema snippet for the problematic field.
+- For the range errors, Help the model to CHANGE and CONVERT the Units if needed for example if the unit in the Report is in cm but the schema expects mm, then convert it to mm by multiplying it by 10.
 - Remember that the default value for many fields is often 'Not Measured' or 'Not Assessed' unless specified differently in the schema.
 - **CONSIDER TO GENERATE THE FEEDBACK IN LIST FORMAT, AND COVER ALL ERRORS MENTIONED IN THE ERROR DETAILS.**
 

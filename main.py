@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from echo_extraction import abbreviation_processor
 from echo_extraction.extraction_logic import extract_component_data
 from echo_extraction.utils import setup_logging, set_log_file
+from echo_extraction.md_cleaner import clean_markdown_file
 from echo_extraction.models import (
     EchoReport, CardiacChambers, ValvularApparatus,
     GreatVesselsAndVenousReturn, CongenitalAndStructuralDefects,
@@ -32,6 +33,7 @@ from echo_extraction.models import (
     PFOAssessment, PFOMeasurements,
     PericardiumAssessment, PericardiumMeasurements
 )
+from echo_extraction.llm_mapping_utils import remap_llm_keys
 
 # Load environment variables
 load_dotenv()
@@ -64,11 +66,11 @@ def process_report(report_text: str, abbrev_dict: Dict[str, str]) -> EchoReport:
     })
 
     component_models_to_extract: List[Type[BaseModel]] = [
-        MitralValve, AorticValve, PulmonaryValve, TricuspidValve,
-        Pericardium,
         LeftVentricle, RightVentricle, LeftAtrium, RightAtrium,
+        MitralValve, AorticValve, PulmonaryValve, TricuspidValve,
+        Aorta, PulmonicVein, IVC,
         VSD, ASD, PFO,
-        Aorta, PulmonicVein, IVC
+        Pericardium,
     ]
 
     extracted_components: Dict[str, BaseModel] = {}
@@ -204,5 +206,10 @@ if __name__ == "__main__":
                     print(f"Successfully processed report {_id}")
                 else:
                     print(f"Failed to process report {_id}")
+
+                # Clean the generated markdown log file
+                logger.info(f"Attempting to clean log file: {log_file_path}")
+                clean_markdown_file(log_file_path)
+
             except Exception as e:
                 print(f"Error processing report {_id}: {e}")

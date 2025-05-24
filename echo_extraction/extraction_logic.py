@@ -3,14 +3,16 @@
 import logging
 import json
 import textwrap
-from typing import Dict, Any, Type, Union, List
+import os
+from typing import Dict, Any, Type, Union, List, Optional
 
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, ValidationError, Field
 
 from .llm_setup import get_extraction_chain, get_feedback_chain, get_json_parser, is_langchain_available
 # Import the new helper for formatting Pydantic errors for the book log
 from .schema_helpers import format_validation_errors_for_agent, format_pydantic_errors_for_book 
 from .models import EchoReport
+from .llm_mapping_utils import remap_llm_keys
 
 # Get a logger specific to this module
 logger = logging.getLogger(__name__)
@@ -87,8 +89,24 @@ def extract_component_data(
         raise RuntimeError("LLM chains or parser not initialized correctly.")
 
     component_name = component_model.__name__
-    component_schema = component_model.model_json_schema()
-    component_schema_str = json.dumps(component_schema, indent=2)
+    # Get the Pydantic schema for error reporting and validation
+    pydantic_component_schema = component_model.model_json_schema()
+    
+    # Load schema from JSON file instead of Pydantic model for the extraction prompt
+    schema_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'JSON_Schema')
+    # Try both .json and .schema.json extensions
+    possible_filenames = [f"{component_name}.json", f"{component_name}.schema.json"]
+    schema_path = None
+    for fname in possible_filenames:
+        candidate = os.path.join(schema_dir, fname)
+        if os.path.isfile(candidate):
+            schema_path = candidate
+            break
+    if not schema_path:
+        raise FileNotFoundError(f"Schema file for component '{component_name}' not found in {schema_dir}.")
+    with open(schema_path, 'r') as f:
+        json_component_schema = json.load(f)
+    component_schema_str = json.dumps(json_component_schema, indent=2)
     
     # Log the start of processing for this component (for the book)
     logger.info(f"Starting component: {component_name}", extra={
@@ -118,7 +136,8 @@ def extract_component_data(
         current_llm_input = {
             "report": report, # Full report is part of the input
             "feedback": feedback,
-            "schema": component_schema_str # Component-specific schema
+            "schema": component_schema_str, # Component-specific JSON schema
+            "schema_name": component_name # Add the component name
         }
         attempt_log_data['extractor_input'] = current_llm_input
 
@@ -134,7 +153,9 @@ def extract_component_data(
             # logger.debug(f"Raw LLM Output for {component_name} (Attempt {i}):\n{textwrap.indent(raw_output, '    ')}")
 
             parsed_data = json_parser.parse(raw_output)
-            validated_component = component_model.model_validate(parsed_data)
+            # Remap keys to match model fields before validation
+            remapped_data = remap_llm_keys(parsed_data, component_model.__fields__)
+            validated_component = component_model.model_validate(remapped_data)
             
             attempt_log_data['status'] = 'Successful'
             # Log successful attempt details to the book
@@ -162,11 +183,11 @@ def extract_component_data(
             last_error_for_runtime_exception = ve
             attempt_log_data['status'] = 'Failed'
             
-            # Format Pydantic errors specifically for the book log
-            formatted_pyd_errors = format_pydantic_errors_for_book(ve.errors(), component_schema, component_name) # Use component_schema for more focused snippets
+            # Format Pydantic errors specifically for the book log - use Pydantic schema for error details
+            formatted_pyd_errors = format_pydantic_errors_for_book(ve.errors(), pydantic_component_schema, component_name)
             attempt_log_data['errors'].extend(formatted_pyd_errors)
             
-            # Generate feedback for the next attempt (uses original ve.errors() and full_echo_schema for context)
+            # Generate feedback for the next attempt - use Pydantic schema for validation errors
             feedback = generate_feedback(report, raw_output, ve.errors(), full_echo_schema)
             attempt_log_data['feedback_output'] = feedback
             # Log failed attempt details to the book

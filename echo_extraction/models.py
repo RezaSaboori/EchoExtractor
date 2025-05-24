@@ -3,11 +3,9 @@ from typing import List, Union, Literal
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 
 
-
-
+# ── Shared Models ────────────────────────────────────────────────────────────
 MeasurementValue = Union[float, int, Literal["Not Measured"]]
 
-# ── Shared Config ─────────────────────────────────────────────────────────────
 common_model_config = ConfigDict(
     populate_by_name=True,
     use_enum_values=True,
@@ -18,8 +16,9 @@ common_model_config = ConfigDict(
 
 
 
+
 # ── Left Ventricle ────────────────────────────────────────────────────────────
-# ── Left Ventricle Enums ────────────────────────────────────────────────────────────
+# ── Left Ventricle Enums ──────────────────────────────────────────────────────
 class LVSizeEnum(str, Enum):
     """Enumeration for Left Ventricular size assessment."""
     NORMAL = "Normal"
@@ -194,23 +193,30 @@ class LVEjectionFraction(BaseModel):
         description="Method of EF measurement"
     )
 
+    # Field-level validator: If value is invalid, only default value, not the whole model
     @field_validator("value", mode="before")
     @classmethod
     def validate_ef_value(cls, v, info):
-        """Validator for Ejection Fraction value."""
+        """If EF value is invalid, return 'Not Measured' but keep other fields."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
             if not (5 <= val <= 90):
-                raise ValueError("EF value must be between 5 and 90 %")
+                return "Not Measured"
             return val
-        raise ValueError("EF value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
+
+    # Field-level validator: If method is invalid, only default method
+    @field_validator("method", mode="before")
+    @classmethod
+    def validate_ef_method(cls, v, info):
+        """If method is invalid, return default method only for this field."""
+        valid_methods = [e.value for e in LVEFMethodEnum]
+        if v in valid_methods:
+            return v
+        return LVEFMethodEnum.SIMPSON
 
 class LVDiameters(BaseModel):
     """Quantitative measurements of Left Ventricular diameters."""
@@ -240,28 +246,23 @@ class LVDiameters(BaseModel):
     @field_validator("lvedd", "lvesd", "ivsd", "pwd", mode="before")
     @classmethod
     def validate_diameter_value(cls, v, info):
-        """Validator for LV diameter values."""
+        """If LV diameter value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
             # Specific range checks based on the JSON schema
-            if cls.__name__ == 'LVLVDiameters':
-                if 'lvedd' in cls.__annotations__ and (val < 2 or val > 9):
-                     raise ValueError("LVEDd value must be between 2 and 9 cm")
-                if 'lvesd' in cls.__annotations__ and (val < 1 or val > 8):
-                     raise ValueError("LVESd value must be between 1 and 8 cm")
-                if 'ivsd' in cls.__annotations__ and (val < 0.5 or val > 3):
-                     raise ValueError("IVSd value must be between 0.5 and 3 cm")
-                if 'pwd' in cls.__annotations__ and (val < 0.5 or val > 3):
-                     raise ValueError("PWD value must be between 0.5 and 3 cm")
+            if info.field_name == 'lvedd' and not (2 <= val <= 9):
+                return "Not Measured"
+            if info.field_name == 'lvesd' and not (1 <= val <= 8):
+                return "Not Measured"
+            if info.field_name == 'ivsd' and not (0.5 <= val <= 3):
+                return "Not Measured"
+            if info.field_name == 'pwd' and not (0.5 <= val <= 3):
+                return "Not Measured"
             return val
-        raise ValueError("Diameter value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class LVVolumes(BaseModel):
@@ -292,28 +293,22 @@ class LVVolumes(BaseModel):
     @field_validator("lvedv", "lvesv", "lveddi", "lvedvi", mode="before")
     @classmethod
     def validate_volume_value(cls, v, info):
-        """Validator for LV volume values."""
+        """If LV volume value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            # Specific range checks based on the JSON schema
-            if cls.__name__ == 'LVLVVolumes':
-                 if 'lvedv' in cls.__annotations__ and (val < 50 or val > 300):
-                     raise ValueError("LVEDV value must be between 50 and 300 cc")
-                 if 'lvesv' in cls.__annotations__ and (val < 10 or val > 200):
-                     raise ValueError("LVESV value must be between 10 and 200 cc")
-                 if 'lveddi' in cls.__annotations__ and (val < 2.0 or val > 4.5):
-                     raise ValueError("LVEDDI value must be between 2.0 and 4.5 cm/m\u00b2")
-                 if 'lvedvi' in cls.__annotations__ and (val < 30 or val > 150):
-                     raise ValueError("LVEDVI value must be between 30 and 150 cc/m\u00b2")
+            if info.field_name == 'lvedv' and not (50 <= val <= 300):
+                return "Not Measured"
+            if info.field_name == 'lvesv' and not (10 <= val <= 200):
+                return "Not Measured"
+            if info.field_name == 'lveddi' and not (2.0 <= val <= 4.5):
+                return "Not Measured"
+            if info.field_name == 'lvedvi' and not (30 <= val <= 150):
+                return "Not Measured"
             return val
-        raise ValueError("Volume or Index value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class LVFunctionIndices(BaseModel):
@@ -341,28 +336,22 @@ class LVFunctionIndices(BaseModel):
     @field_validator("fs", "tei_index", "dp_dt", "sphericity_index", mode="before")
     @classmethod
     def validate_function_index_value(cls, v, info):
-        """Validator for LV function index values."""
+        """If LV function index value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            # Specific range checks based on the JSON schema
-            if cls.__name__ == 'LVLVFunctionIndices':
-                 if 'fs' in cls.__annotations__ and (val < 10 or val > 50):
-                     raise ValueError("FS value must be between 10 and 50 %")
-                 if 'tei_index' in cls.__annotations__ and (val < 0 or val > 1):
-                     raise ValueError("Tei Index value must be between 0 and 1")
-                 if 'dp_dt' in cls.__annotations__ and (val < 400 or val > 3000):
-                     raise ValueError("dP/dt value must be between 400 and 3000")
-                 if 'sphericity_index' in cls.__annotations__ and (val < 0 or val > 1):
-                     raise ValueError("Sphericity Index value must be between 0 and 1")
+            if info.field_name == 'fs' and not (10 <= val <= 50):
+                return "Not Measured"
+            if info.field_name == 'tei_index' and not (0 <= val <= 1):
+                return "Not Measured"
+            if info.field_name == 'dp_dt' and not (400 <= val <= 3000):
+                return "Not Measured"
+            if info.field_name == 'sphericity_index' and not (0 <= val <= 1):
+                return "Not Measured"
             return val
-        raise ValueError("Function Index value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class LVStrainMeasures(BaseModel):
@@ -393,28 +382,16 @@ class LVStrainMeasures(BaseModel):
     @field_validator("global_longitudinal_strain", "longitudinal_strain_4ch", "longitudinal_strain_2ch", "longitudinal_strain_apical_long_axis", mode="before")
     @classmethod
     def validate_strain_value(cls, v, info):
-        """Validator for LV strain values."""
+        """If LV strain value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            # Specific range checks based on the JSON schema
-            if cls.__name__ == 'LVLVStrainMeasures':
-                 if 'global_longitudinal_strain' in cls.__annotations__ and (val < -30 or val > -5):
-                     raise ValueError("Global longitudinal strain value must be between -30 and -5 %")
-                 if 'longitudinal_strain_4ch' in cls.__annotations__ and (val < -30 or val > -5):
-                     raise ValueError("Longitudinal Strain (4ch) value must be between -30 and -5 %")
-                 if 'longitudinal_strain_2ch' in cls.__annotations__ and (val < -30 or val > -5):
-                     raise ValueError("Longitudinal Strain (2ch) value must be between -30 and -5 %")
-                 if 'longitudinal_strain_apical_long_axis' in cls.__annotations__ and (val < -30 or val > -5):
-                     raise ValueError("Longitudinal Strain (Apical Long axis) value must be between -30 and -5 %")
+            if info.field_name in ["global_longitudinal_strain", "longitudinal_strain_4ch", "longitudinal_strain_2ch", "longitudinal_strain_apical_long_axis"] and not (-30 <= val <= -5):
+                return "Not Measured"
             return val
-        raise ValueError("Strain value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class LVRegionalWallMotionScore(BaseModel):
@@ -433,20 +410,16 @@ class LVRegionalWallMotionScore(BaseModel):
     @field_validator("score", mode="before")
     @classmethod
     def validate_score_value(cls, v, info):
-        """Validator for Regional Wall Motion Score value."""
+        """If RWMS score value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
             if not (1 <= val <= 5):
-                raise ValueError("Score value must be between 1 and 5")
+                return "Not Measured"
             return val
-        raise ValueError("Score value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 class LVRegionalWallMotionScores(BaseModel):
     """Quantitative measurements of Regional Wall Motion Scores."""
@@ -464,20 +437,16 @@ class LVRegionalWallMotionScores(BaseModel):
     @field_validator("rwmsi", mode="before")
     @classmethod
     def validate_rwmsi_value(cls, v, info):
-        """Validator for RWMSI value."""
+        """If RWMSI value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
             if not (1 <= val <= 5):
-                raise ValueError("RWMSI value must be between 1 and 5")
+                return "Not Measured"
             return val
-        raise ValueError("RWMSI value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class LVMass(BaseModel):
@@ -653,30 +622,24 @@ class RVDimensions(BaseModel):
     @field_validator("mid_rv_diameter", "longitudinal_rv_diameter", "rv_thickness", "rvot_diameter_sax", "rvot_diameter_plax", mode="before")
     @classmethod
     def validate_dimension_value(cls, v, info):
-        """Validator for RV dimension values."""
+        """If RV dimension value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            # Specific range checks based on the JSON schema
-            if cls.__name__ == 'RVDimensions':
-                if 'mid_rv_diameter' in cls.__annotations__ and (val < 1.0 or val > 5.0):
-                     raise ValueError("Mid RV Diameter value must be between 1.0 and 5.0 cm")
-                if 'longitudinal_rv_diameter' in cls.__annotations__ and (val < 2.0 or val > 9.0):
-                     raise ValueError("Longitudinal RV Diameter value must be between 2.0 and 9.0 cm")
-                if 'rv_thickness' in cls.__annotations__ and (val < 1.0 or val > 15.0):
-                     raise ValueError("RV Thickness value must be between 1.0 and 15.0 mm")
-                if 'rvot_diameter_sax' in cls.__annotations__ and (val < 5.0 or val > 45.0):
-                     raise ValueError("RVOT diameter (in SAX View) value must be between 5.0 and 45.0 mm")
-                if 'rvot_diameter_plax' in cls.__annotations__ and (val < 5.0 or val > 45.0):
-                     raise ValueError("RVOT diameter (in PLAX View) value must be between 5.0 and 45.0 mm")
+            if info.field_name == 'mid_rv_diameter' and not (1.0 <= val <= 5.0):
+                return "Not Measured"
+            if info.field_name == 'longitudinal_rv_diameter' and not (2.0 <= val <= 9.0):
+                return "Not Measured"
+            if info.field_name == 'rv_thickness' and not (1.0 <= val <= 15.0):
+                return "Not Measured"
+            if info.field_name == 'rvot_diameter_sax' and not (5.0 <= val <= 45.0):
+                return "Not Measured"
+            if info.field_name == 'rvot_diameter_plax' and not (5.0 <= val <= 45.0):
+                return "Not Measured"
             return val
-        raise ValueError("Dimension value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class RVAreas(BaseModel):
@@ -705,26 +668,20 @@ class RVAreas(BaseModel):
     @field_validator("rved_area", "rves_area", "fac", mode="before")
     @classmethod
     def validate_area_value(cls, v, info):
-        """Validator for RV area values."""
+        """If RV area value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            # Specific range checks based on the JSON schema
-            if cls.__name__ == 'RVAreas':
-                 if 'rved_area' in cls.__annotations__ and (val < 5.0 or val > 40.0):
-                     raise ValueError("RVED Area value must be between 5.0 and 40.0 cm\u00b2")
-                 if 'rves_area' in cls.__annotations__ and (val < 2.0 or val > 30.0):
-                     raise ValueError("RVES Area value must be between 2.0 and 30.0 cm\u00b2")
-                 if 'fac' in cls.__annotations__ and (val < 10 or val > 70):
-                     raise ValueError("FAC value must be between 10 and 70 %")
+            if info.field_name == 'rved_area' and not (5.0 <= val <= 40.0):
+                return "Not Measured"
+            if info.field_name == 'rves_area' and not (2.0 <= val <= 30.0):
+                return "Not Measured"
+            if info.field_name == 'fac' and not (10 <= val <= 70):
+                return "Not Measured"
             return val
-        raise ValueError("Area or FAC value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class RVFunctionIndices(BaseModel):
@@ -745,33 +702,51 @@ class RVFunctionIndices(BaseModel):
     sm: MeasurementValue = Field(
         default="Not Measured",
         alias="Sm",
-        description="Tricuspid Annular Peak Systolic Velocity",
+        description="Tricuspid annular systolic velocity",
         unit="cm/sec"
     )
 
-    @field_validator("rv_mpi", "tapse", "sm", mode="before")
+    @field_validator("rv_mpi")
     @classmethod
-    def validate_function_index_value(cls, v, info):
-        """Validator for RV function index values."""
+    def validate_rv_mpi(cls, v, info):
+        """If RV MPI value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-        if isinstance(v, (int, float)):
-            val = float(v)
-            # Specific range checks based on the JSON schema
-            if cls.__name__ == 'RVFunctionIndices':
-                 if 'rv_mpi' in cls.__annotations__ and (val < 0.0 or val > 1.5):
-                     raise ValueError("RV MPI value must be between 0.0 and 1.5")
-                 if 'tapse' in cls.__annotations__ and (val < 5.0 or val > 35.0):
-                     raise ValueError("TAPSE value must be between 5.0 and 35.0 mm")
-                 if 'sm' in cls.__annotations__ and (val < 2.0 or val > 20.0):
-                     raise ValueError("Sm value must be between 2.0 and 20.0 cm/sec")
-            return val
-        raise ValueError("Function Index value must be a number or 'Not Measured'")
+        try:
+            value = float(v)
+            if not 0.0 <= value <= 1.5:
+                return "Not Measured"
+        except Exception:
+            return "Not Measured"
+        return v
+
+    @field_validator("tapse")
+    @classmethod
+    def validate_tapse(cls, v, info):
+        """If TAPSE value is invalid, only default that field."""
+        if v == "Not Measured":
+            return v
+        try:
+            value = float(v)
+            if not 5.0 <= value <= 40.0:
+                return "Not Measured"
+        except Exception:
+            return "Not Measured"
+        return v
+
+    @field_validator("sm")
+    @classmethod
+    def validate_sm(cls, v, info):
+        """If Sm value is invalid, only default that field."""
+        if v == "Not Measured":
+            return v
+        try:
+            value = float(v)
+            if not 0.0 <= value <= 20.0:
+                return "Not Measured"
+        except Exception:
+            return "Not Measured"
+        return v
 
 
 class RVMeasurements(BaseModel):
@@ -933,26 +908,16 @@ class LAVolumes(BaseModel):
     @field_validator("biplane_volume", "volume_4ch_view", "volume_2ch_view", mode="before")
     @classmethod
     def validate_volume_value(cls, v, info):
-        """Validator for LA volume values."""
+        """If LA volume value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            # Specific range checks based on the JSON schema
-            if cls.__name__ == 'LAVolumes':
-                 if 'biplane_volume' in cls.__annotations__ and (val < 10 or val > 250):
-                     raise ValueError("Biplane Volume value must be between 10 and 250 cc")
-                 if 'volume_4ch_view' in cls.__annotations__ and (val < 10 or val > 250):
-                     raise ValueError("Volume (4Ch View) value must be between 10 and 250 cc")
-                 if 'volume_2ch_view' in cls.__annotations__ and (val < 10 or val > 250):
-                     raise ValueError("Volume (2Ch View) value must be between 10 and 250 cc")
+            if info.field_name in ["biplane_volume", "volume_4ch_view", "volume_2ch_view"] and not (10 <= val <= 250):
+                return "Not Measured"
             return val
-        raise ValueError("Volume value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class LAFunctionIndices(BaseModel):
@@ -981,26 +946,20 @@ class LAFunctionIndices(BaseModel):
     @field_validator("la_ef", "active_ef", "passive_ef", mode="before")
     @classmethod
     def validate_function_index_value(cls, v, info):
-        """Validator for LA function index values."""
+        """If LA function index value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            # Specific range checks based on the JSON schema
-            if cls.__name__ == 'LAFunctionIndices':
-                 if 'la_ef' in cls.__annotations__ and (val < 10 or val > 90):
-                     raise ValueError("LA EF value must be between 10 and 90 %")
-                 if 'active_ef' in cls.__annotations__ and (val < 5 or val > 60):
-                     raise ValueError("Active EF value must be between 5 and 60 %")
-                 if 'passive_ef' in cls.__annotations__ and (val < 5 or val > 60):
-                     raise ValueError("Passive EF value must be between 5 and 60 %")
+            if info.field_name == 'la_ef' and not (10 <= val <= 90):
+                return "Not Measured"
+            if info.field_name == 'active_ef' and not (5 <= val <= 60):
+                return "Not Measured"
+            if info.field_name == 'passive_ef' and not (5 <= val <= 60):
+                return "Not Measured"
             return val
-        raise ValueError("Function Index value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class LAStrainMeasures(BaseModel):
@@ -1016,14 +975,17 @@ class LAStrainMeasures(BaseModel):
 
     @field_validator("global_strain_2d_ste", mode="before")
     @classmethod
-    def validate_strain_value(cls, v):
-        """Validator for LA strain value."""
-        if isinstance(v, (int, float)):
+    def validate_strain_value(cls, v, info):
+        """If LA strain value is invalid, only default that field."""
+        if v == "Not Measured":
+            return v
+        try:
             val = float(v)
             if not (5 <= val <= 60):
-                raise ValueError("Global Strain (2D-STE) value must be between 5 and 60 %")
+                return "Not Measured"
             return val
-        raise ValueError("Strain value must be a number")
+        except Exception:
+            return "Not Measured"
 
 
 class LAAppendageMeasurements(BaseModel):
@@ -1039,14 +1001,17 @@ class LAAppendageMeasurements(BaseModel):
 
     @field_validator("velocity", mode="before")
     @classmethod
-    def validate_velocity_value(cls, v):
+    def validate_velocity_value(cls, v, info):
         """Validator for LAA velocity value."""
-        if isinstance(v, (int, float)):
+        if v == "Not Measured":
+            return v
+        try:
             val = float(v)
             if not (10 <= val <= 100):
-                raise ValueError("Velocity value must be between 10 and 100 cm/sec")
+                return "Not Measured"
             return val
-        raise ValueError("Velocity value must be a number")
+        except Exception:
+            return "Not Measured"
 
 
 class LAMeasurements(BaseModel):
@@ -1077,7 +1042,7 @@ class LAMeasurements(BaseModel):
     )
     strain_measures: LAStrainMeasures = Field(
         default_factory=LAStrainMeasures,
-        alias="Strai Measures", # Note: Typo "Strai" kept as per JSON schema
+        alias="Strain Measures",
         description="Left Atrial strain measurements"
     )
     appendage: LAAppendageMeasurements = Field(
@@ -1089,24 +1054,18 @@ class LAMeasurements(BaseModel):
     @field_validator("diameter", "area", mode="before")
     @classmethod
     def validate_simple_measurement_value(cls, v, info):
-        """Validator for simple LA measurement values (Diameter, Area)."""
+        """If LA measurement value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            # Specific range checks based on the JSON schema
-            if cls.__name__ == 'LAMeasurements':
-                 if 'diameter' in cls.__annotations__ and (val < 2.0 or val > 7.0):
-                     raise ValueError("Diameter value must be between 2.0 and 7.0 cm")
-                 if 'area' in cls.__annotations__ and (val < 5.0 or val > 60.0):
-                     raise ValueError("Area value must be between 5.0 and 60.0 cm\u00b2")
+            if info.field_name == 'diameter' and not (2.0 <= val <= 7.0):
+                return "Not Measured"
+            if info.field_name == 'area' and not (5.0 <= val <= 60.0):
+                return "Not Measured"
             return val
-        raise ValueError("Measurement value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 # ── Left Atrium Root ───────────────────────────────────────────────────────────
@@ -1407,21 +1366,15 @@ class RAMeasurements(BaseModel):
         """Validator for simple RA measurement values (Diameter, Area)."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            # Specific range checks based on the JSON schema
-            if cls.__name__ == 'RAMeasurements':
-                 if 'diameter' in cls.__annotations__ and (val < 2.0 or val > 7.0):
-                     raise ValueError("Diameter value must be between 2.0 and 7.0 cm")
-                 if 'area' in cls.__annotations__ and (val < 5.0 or val > 60.0):
-                     raise ValueError("Area value must be between 5.0 and 60.0 cm\u00b2")
+            if info.field_name == 'diameter' and not (2.0 <= val <= 7.0):
+                return "Not Measured"
+            if info.field_name == 'area' and not (5.0 <= val <= 60.0):
+                return "Not Measured"
             return val
-        raise ValueError("Measurement value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 # ── Right Atrium Root ──────────────────────────────────────────────────────────
@@ -1577,22 +1530,16 @@ class EffusionSizeMeasurement(BaseModel):
     @field_validator("posterior", "anterior", mode="before")
     @classmethod
     def validate_measurement(cls, v):
-        """Validator for effusion measurement values."""
+        """If effusion measurement value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-            try:
-                v = float(v)
-            except ValueError:
-                raise ValueError("Measurement value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            # Adjusted range based on typical echo measurements, allowing 0
             if not (0 <= val <= 50):
-                 raise ValueError("Value must be between 0 and 50 mm")
+                return "Not Measured"
             return val
-        raise ValueError("Measurement value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 # ── Full Pericardium Measurements Root ─────────────────────────────────────────────
 class PericardiumMeasurements(BaseModel):
@@ -1612,22 +1559,16 @@ class PericardiumMeasurements(BaseModel):
     @field_validator("pericardial_thickness", mode="before")
     @classmethod
     def validate_thickness(cls, v):
-        """Validator for pericardial thickness measurement."""
+        """If pericardial thickness value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-            try:
-                v = float(v)
-            except ValueError:
-                raise ValueError("Thickness value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            # Adjusted range, allowing 0.5 as a minimum typical measurement
             if not (0.5 <= val <= 10.0):
-                raise ValueError("Value must be between 0.5 and 10.0 mm")
+                return "Not Measured"
             return val
-        raise ValueError("Thickness value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 
@@ -1795,24 +1736,19 @@ class MitralDimensions(BaseModel):
     @field_validator("annulus_diameter", "amvl_length", "pmvl_length", mode="before")
     @classmethod
     def validate_dimensions(cls, v, info):
-        """Validator for mitral dimension values."""
+        """If mitral dimension value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
             field_name = info.field_name
             if field_name == "annulus_diameter" and not (2.0 <= val <= 5.0):
-                raise ValueError(f"{field_name} value must be between 2.0 and 5.0 cm")
+                return "Not Measured"
             elif field_name in ["amvl_length", "pmvl_length"] and not (1.5 <= val <= 4.0):
-                raise ValueError(f"{field_name} value must be between 1.5 and 4.0 cm")
+                return "Not Measured"
             return val
-        raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class MitralRegurgitationParameters(BaseModel):
@@ -1841,26 +1777,21 @@ class MitralRegurgitationParameters(BaseModel):
     @field_validator("mr_rv", "mr_roa", "mr_vc_area", mode="before")
     @classmethod
     def validate_mr_params(cls, v, info):
-        """Validator for mitral regurgitation parameter values."""
+        """If mitral regurgitation parameter value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
             field_name = info.field_name
             if field_name == "mr_rv" and not (1.0 <= val <= 200.0):
-                 raise ValueError(f"{field_name} value must be between 1.0 and 200.0 ml")
+                return "Not Measured"
             elif field_name == "mr_roa" and not (0.01 <= val <= 1.5):
-                 raise ValueError(f"{field_name} value must be between 0.01 and 1.5 cm²")
+                return "Not Measured"
             elif field_name == "mr_vc_area" and not (0.01 <= val <= 1.0):
-                 raise ValueError(f"{field_name} value must be between 0.01 and 1.0 cm²")
+                return "Not Measured"
             return val
-        raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class MitralStenosisGradients(BaseModel):
@@ -1883,24 +1814,19 @@ class MitralStenosisGradients(BaseModel):
     @field_validator("mean_gradient", "pht", mode="before")
     @classmethod
     def validate_ms_gradients(cls, v, info):
-        """Validator for mitral stenosis gradient values."""
+        """If mitral stenosis gradient value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
             field_name = info.field_name
             if field_name == "mean_gradient" and not (0.0 <= val <= 40.0):
-                 raise ValueError(f"{field_name} value must be between 0.0 and 40.0 mmHg")
+                return "Not Measured"
             elif field_name == "pht" and not (30.0 <= val <= 400.0):
-                 raise ValueError(f"{field_name} value must be between 30.0 and 400.0 ms")
+                return "Not Measured"
             return val
-        raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class MorphoFunctionalIndices(BaseModel):
@@ -1928,26 +1854,21 @@ class MorphoFunctionalIndices(BaseModel):
     @field_validator("tenting_area", "coaptation_depth", "ivrt", mode="before")
     @classmethod
     def validate_morpho_functional(cls, v, info):
-        """Validator for morpho-functional index values."""
+        """If morpho-functional index value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
             field_name = info.field_name
             if field_name == "tenting_area" and not (0.0 <= val <= 6.0):
-                 raise ValueError(f"{field_name} value must be between 0.0 and 6.0 cm²")
+                return "Not Measured"
             elif field_name == "coaptation_depth" and not (0.0 <= val <= 20.0):
-                 raise ValueError(f"{field_name} value must be between 0.0 and 20.0 mm")
+                return "Not Measured"
             elif field_name == "ivrt" and not (0.0 <= val <= 150.0):
-                 raise ValueError(f"{field_name} value must be between 0.0 and 150.0 ms")
+                return "Not Measured"
             return val
-        raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class MitralDopplerMeasurements(BaseModel):
@@ -2028,40 +1949,35 @@ class MitralDopplerMeasurements(BaseModel):
     )
     @classmethod
     def validate_mitral_doppler(cls, v, info):
-        """Validator for mitral Doppler measurement values."""
+        """If mitral Doppler measurement value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
             field_name = info.field_name
-            if field_name in ["e_septal"] and not (2.0 <= val <= 16.0):
-                 raise ValueError(f"{field_name} value must be between 2.0 and 16.0 cm/sec")
-            elif field_name in ["e_lateral"] and not (4.0 <= val <= 20.0):
-                 raise ValueError(f"{field_name} value must be between 4.0 and 20.0 cm/sec")
-            elif field_name in ["a"] and not (2.0 <= val <= 14.0):
-                 raise ValueError(f"{field_name} value must be between 2.0 and 14.0 cm/sec")
-            elif field_name in ["s"] and not (5.0 <= val <= 12.0):
-                 raise ValueError(f"{field_name} value must be between 5.0 and 112.0 cm/sec")
-            elif field_name in ["vp"] and not (20.0 <= val <= 90.0):
-                 raise ValueError(f"{field_name} value must be between 20.0 and 90.0 cm/sec")
+            if field_name == "e_septal" and not (2.0 <= val <= 16.0):
+                return "Not Measured"
+            elif field_name == "e_lateral" and not (4.0 <= val <= 20.0):
+                return "Not Measured"
+            elif field_name == "a" and not (2.0 <= val <= 14.0):
+                return "Not Measured"
+            elif field_name == "s" and not (5.0 <= val <= 112.0):
+                return "Not Measured"
+            elif field_name == "vp" and not (20.0 <= val <= 90.0):
+                return "Not Measured"
             elif field_name == "mve" and not (0.3 <= val <= 3.5):
-                 raise ValueError(f"{field_name} value must be between 0.3 and 3.5 m/s")
+                return "Not Measured"
             elif field_name == "vti" and not (5.0 <= val <= 150.0):
-                 raise ValueError(f"{field_name} value must be between 5.0 and 150.0 cm")
-            elif field_name in ["e_a_ratio"] and not (0.5 <= val <= 5.0):
-                 raise ValueError(f"{field_name} value must be between 0.5 and 5.0")
-            elif field_name in ["e_e_prime_ratio"] and not (3.0 <= val <= 30.0):
-                 raise ValueError(f"{field_name} value must be between 3.0 and 30.0")
+                return "Not Measured"
+            elif field_name == "e_a_ratio" and not (0.5 <= val <= 5.0):
+                return "Not Measured"
+            elif field_name == "e_e_prime_ratio" and not (3.0 <= val <= 30.0):
+                return "Not Measured"
             elif field_name == "deceleration_time" and not (100.0 <= val <= 400.0):
-                 raise ValueError(f"{field_name} value must be between 100.0 and 400.0 ms")
+                return "Not Measured"
             return val
-        raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class AnnulusMotion(BaseModel):
@@ -2084,20 +2000,16 @@ class AnnulusMotion(BaseModel):
     @field_validator("mapse", "tmad", mode="before")
     @classmethod
     def validate_mapse(cls, v, info):
-        """Validator for MAPSE value."""
+        """If MAPSE or TMAD value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            if not (5.0 <= val <= 25.0): 
-                 raise ValueError(f"{info.field_name} value must be between 5.0 and 25.0 cm")
+            if not (5.0 <= val <= 25.0):
+                return "Not Measured"
             return val
-        raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 # ── Final MitralValveMeasurements Root ──────────────────────────────────────────
@@ -2143,21 +2055,16 @@ class MitralValveMeasurements(BaseModel):
     @field_validator("area", mode="before")
     @classmethod
     def validate_area(cls, v, info):
-        """Validator for mitral valve area."""
+        """If mitral valve area is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            if not (0.5 <= val <= 6.0): 
-                 raise ValueError(f"{info.field_name} value must be between 0.5 and 6.0 cm²")
+            if not (0.5 <= val <= 6.0):
+                return "Not Measured"
             return val
-        raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 # ── Mitral Valve Root ───────────────────────────────────────────────────────────────
@@ -2283,24 +2190,19 @@ class TricuspidDimensions(BaseModel):
     @field_validator("annulus_diameter", "annulus_area", mode="before")
     @classmethod
     def validate_dimensions(cls, v, info):
-        """Validator for tricuspid dimension values."""
+        """If tricuspid dimension value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
             field_name = info.field_name
             if field_name == "annulus_diameter" and not (2.0 <= val <= 6.0):
-                raise ValueError(f"{field_name} value must be between 2.0 and 6.0 cm")
+                return "Not Measured"
             elif field_name == "annulus_area" and not (3.0 <= val <= 20.0):
-                raise ValueError(f"{field_name} value must be between 3.0 and 20.0 cm²")
+                return "Not Measured"
             return val
-        raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class TricuspidRegurgitationParameters(BaseModel):
@@ -2329,25 +2231,19 @@ class TricuspidRegurgitationParameters(BaseModel):
     @field_validator("tr_vc", "tr_pisa_radius", "tr_pg", mode="before")
     @classmethod
     def validate_tr_params(cls, v, info):
-        """Validator for tricuspid regurgitation parameter values."""
+        """If tricuspid regurgitation parameter value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
             field_name = info.field_name
             if field_name in ["tr_vc", "tr_pisa_radius"] and not (1.0 <= val <= 20.0):
-                 # Adjusted range slightly based on common values, adjust if needed
-                 raise ValueError(f"{field_name} value must be between 1.0 and 20.0 mm")
+                return "Not Measured"
             elif field_name == "tr_pg" and not (5.0 <= val <= 100.0):
-                 raise ValueError(f"{field_name} value must be between 5.0 and 100.0 mmHg")
+                return "Not Measured"
             return val
-        raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class TricuspidGradients(BaseModel):
@@ -2370,24 +2266,19 @@ class TricuspidGradients(BaseModel):
     @field_validator("tv_mean_gradient", "tv_pht", mode="before")
     @classmethod
     def validate_tv_gradients(cls, v, info):
-        """Validator for tricuspid gradient values."""
+        """If tricuspid gradient value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
             field_name = info.field_name
             if field_name == "tv_mean_gradient" and not (0.0 <= val <= 20.0):
-                 raise ValueError(f"{field_name} value must be between 0.0 and 20.0 mmHg")
+                return "Not Measured"
             elif field_name == "tv_pht" and not (30.0 <= val <= 400.0):
-                 raise ValueError(f"{field_name} value must be between 30.0 and 400.0 ms")
+                return "Not Measured"
             return val
-        raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class TricuspidDopplerMeasurements(BaseModel):
@@ -2628,28 +2519,23 @@ class AorticRegurgitationParameters(BaseModel):
     @field_validator("ar_rv", "ar_roa", "vc", "ar_pht", mode="before")
     @classmethod
     def validate_ar_params(cls, v, info):
-        """Validator for aortic regurgitation parameter values."""
+        """If aortic regurgitation parameter value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
             field_name = info.field_name
             if field_name == "ar_rv" and not (1.0 <= val <= 100.0):
-                 raise ValueError(f"{field_name} value must be between 1.0 and 100.0 ml")
+                return "Not Measured"
             elif field_name == "ar_roa" and not (0.01 <= val <= 1.0):
-                 raise ValueError(f"{field_name} value must be between 0.01 and 1.0 cm²")
+                return "Not Measured"
             elif field_name == "vc" and not (1.0 <= val <= 10.0):
-                 raise ValueError(f"{field_name} value must be between 1.0 and 10.0 mm")
+                return "Not Measured"
             elif field_name == "ar_pht" and not (100 <= val <= 800):
-                 raise ValueError(f"{field_name} value must be between 100 and 800 ms")
+                return "Not Measured"
             return val
-        raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class AorticStenosisGradients(BaseModel):
@@ -2698,30 +2584,25 @@ class AorticStenosisGradients(BaseModel):
     )
     @classmethod
     def validate_as_gradients(cls, v, info):
-        """Validator for aortic stenosis gradient values."""
+        """If aortic stenosis gradient value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
             field_name = info.field_name
             if field_name in ["peak_velocity", "lvot_peak_velocity"] and not (0.5 <= val <= 6.0):
-                 raise ValueError(f"{field_name} value must be between 0.5 and 6.0 m/s")
+                return "Not Measured"
             elif field_name == "lvot_ao_peak_velocity_ratio" and not (0.1 <= val <= 1):
-                 raise ValueError(f"{field_name} value must be between 0.1 and 1")
+                return "Not Measured"
             elif field_name == "pressure_recovery" and not (0 <= val <= 50):
-                 raise ValueError(f"{field_name} value must be between 0 and 50 mmHg")
+                return "Not Measured"
             elif field_name == "aortic_ppg" and not (0 <= val <= 150):
-                 raise ValueError(f"{field_name} value must be between 0 and 150 mmHg")
+                return "Not Measured"
             elif field_name == "aortic_mpg" and not (0 <= val <= 100):
-                 raise ValueError(f"{field_name} value must be between 0 and 100 mmHg")
+                return "Not Measured"
             return val
-        raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class AorticDopplerMeasurements(BaseModel):
@@ -2743,21 +2624,16 @@ class AorticDopplerMeasurements(BaseModel):
     @field_validator("aortic_vti", "lvot_vti", mode="before")
     @classmethod
     def validate_doppler(cls, v, info):
-        """Validator for aortic Doppler measurement values."""
+        """If aortic Doppler measurement value is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
             if not (5.0 <= val <= 150.0):
-                 raise ValueError(f"{info.field_name} value must be between 5.0 and 150.0 cm")
+                return "Not Measured"
             return val
-        raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 # ── Full AorticValveMeasurements Root ─────────────────────────────────────────────
@@ -3013,22 +2889,17 @@ class PulmonaryGradients(BaseModel):
         """Validator for pulmonary gradient values."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-             try:
-                 v = float(v)
-             except ValueError:
-                 raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
             if info.field_name == "pv_peak_velocity" and not (0.5 <= val <= 8.0):
-                 raise ValueError(f"{info.field_name} value must be between 0 and 6.0 m/s")
-            elif info.field_name in ["pv_ppg"] and not (0 <= val <= 120.0):
-                 raise ValueError(f"{info.field_name} value must be between 0 and 120.0 mmHg")
-            elif info.field_name in ["pv_mpg"] and not (0 <= val <= 80.0):
-                 raise ValueError(f"{info.field_name} value must be between 0 and 80.0 mmHg")
+                return "Not Measured"
+            elif info.field_name == "pv_ppg" and not (0 <= val <= 120.0):
+                return "Not Measured"
+            elif info.field_name == "pv_mpg" and not (0 <= val <= 80.0):
+                return "Not Measured"
             return val
-        raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class PulmonaryDopplerMeasurements(BaseModel):
@@ -3453,26 +3324,18 @@ class PulmonicVeinDopplerMeasurements(BaseModel):
     @field_validator("peak_s_velocity", "peak_d_velocity", "peak_ar_velocity", mode="before")
     @classmethod
     def validate_velocity(cls, v):
-        """Validator for pulmonary vein velocity measurements."""
+        """If pulmonary vein velocity measurement is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-            try:
-                v = float(v)
-            except ValueError:
-                raise ValueError("Velocity value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            # Ranges based on JSON schema
-            if Field(alias="Peak S Velocity").name == "peak_s_velocity" and not (10 <= val <= 150):
-                 raise ValueError("Peak S Velocity must be between 10 and 150 cm/sec")
-            if Field(alias="Peak D Velocity").name == "peak_d_velocity" and not (10 <= val <= 150):
-                 raise ValueError("Peak D Velocity must be between 10 and 150 cm/sec")
-            if Field(alias="Peak AR Velocity").name == "peak_ar_velocity" and not (5 <= val <= 100):
-                 raise ValueError("Peak AR Velocity must be between 5 and 100 cm/sec")
+            if ("peak_s_velocity" in cls.__annotations__ and not (10 <= val <= 150)) or \
+               ("peak_d_velocity" in cls.__annotations__ and not (10 <= val <= 150)) or \
+               ("peak_ar_velocity" in cls.__annotations__ and not (5 <= val <= 100)):
+                return "Not Measured"
             return val
-        raise ValueError("Velocity value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 class PulmonicVeinMeasurements(BaseModel):
@@ -3492,22 +3355,16 @@ class PulmonicVeinMeasurements(BaseModel):
     @field_validator("ar_duration", mode="before")
     @classmethod
     def validate_ar_duration(cls, v):
-        """Validator for AR duration measurement."""
+        """If AR duration measurement is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-            try:
-                v = float(v)
-            except ValueError:
-                raise ValueError("AR Duration value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            # Range based on JSON schema
             if not (10 <= val <= 300):
-                raise ValueError("Value must be between 10 and 300 ms")
+                return "Not Measured"
             return val
-        raise ValueError("AR Duration value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 # ── Pulmonic Vein Root ───────────────────────────────────────────────────────────────
@@ -3603,42 +3460,30 @@ class IVCMeasurements(BaseModel):
     @field_validator("diameter", mode="before")
     @classmethod
     def validate_diameter(cls, v):
-        """Validator for IVC diameter measurement."""
+        """If IVC diameter measurement is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-            try:
-                v = float(v)
-            except ValueError:
-                raise ValueError("Diameter value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            # Range based on JSON schema
             if not (0.5 <= val <= 4.0):
-                raise ValueError("Value must be between 0.5 and 4.0 cm")
+                return "Not Measured"
             return val
-        raise ValueError("Diameter value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
     @field_validator("collapsibility_index", mode="before")
     @classmethod
     def validate_collapsibility_index(cls, v):
-        """Validator for IVC collapsibility index measurement."""
+        """If IVC collapsibility index measurement is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-            try:
-                v = float(v)
-            except ValueError:
-                raise ValueError("Collapsibility Index value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            # Range based on JSON schema
             if not (0 <= val <= 100):
-                raise ValueError("Value must be between 0 and 100 %")
+                return "Not Measured"
             return val
-        raise ValueError("Collapsibility Index value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 # ── IVC Root ───────────────────────────────────────────────────────────────
@@ -3654,14 +3499,6 @@ class IVC(BaseModel):
         ..., # This field is required
         description="Quantitative measurements for the IVC"
     )
-
-
-
-
-
-
-
-
 
 
 
@@ -3770,7 +3607,7 @@ class VSDMeasurements(BaseModel):
     @field_validator("diameter", mode="before")
     @classmethod
     def validate_diameter(cls, v):
-        """Validator for VSD diameter measurement."""
+        """If VSD diameter measurement is invalid, only default that field."""
         if v == "Not Measured":
             return v
         if isinstance(v, str):
@@ -3790,7 +3627,7 @@ class VSDMeasurements(BaseModel):
     @field_validator("peak_gradient", mode="before")
     @classmethod
     def validate_peak_gradient(cls, v):
-        """Validator for VSD peak gradient measurement."""
+        """If VSD peak gradient measurement is invalid, only default that field."""
         if v == "Not Measured":
             return v
         if isinstance(v, str):
@@ -3810,7 +3647,7 @@ class VSDMeasurements(BaseModel):
     @field_validator("qp_qs", mode="before")
     @classmethod
     def validate_qp_qs(cls, v):
-        """Validator for Qp/Qs ratio measurement."""
+        """If VSD Qp/Qs ratio measurement is invalid, only default that field."""
         if v == "Not Measured":
             return v
         if isinstance(v, str):
@@ -4112,42 +3949,30 @@ class PFOMeasurements(BaseModel):
     @field_validator("tunnel_length", mode="before")
     @classmethod
     def validate_tunnel_length(cls, v):
-        """Validator for PFO tunnel length measurement."""
+        """If PFO tunnel length measurement is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-            try:
-                v = float(v)
-            except ValueError:
-                raise ValueError("Tunnel Length value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            # Range based on JSON schema: minimum 1, maximum 20
             if not (1.0 <= val <= 20.0):
-                raise ValueError("Tunnel Length value must be between 1.0 and 20.0 mm")
+                return "Not Measured"
             return val
-        raise ValueError("Tunnel Length value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
     @field_validator("qp_qs", mode="before")
     @classmethod
     def validate_qp_qs(cls, v):
-        """Validator for Qp/Qs ratio measurement."""
+        """If PFO Qp/Qs ratio measurement is invalid, only default that field."""
         if v == "Not Measured":
             return v
-        if isinstance(v, str):
-            try:
-                v = float(v)
-            except ValueError:
-                raise ValueError("Qp/Qs value must be a number or 'Not Measured'")
-
-        if isinstance(v, (int, float)):
+        try:
             val = float(v)
-            # Range based on JSON schema: minimum 0.5, maximum 5.0
             if not (0.5 <= val <= 5.0):
-                raise ValueError("Qp/Qs value must be between 0.5 and 5.0")
+                return "Not Measured"
             return val
-        raise ValueError("Qp/Qs value must be a number or 'Not Measured'")
+        except Exception:
+            return "Not Measured"
 
 
 # ── PFO Root ─────────────────────────────────────────────────────────────────
