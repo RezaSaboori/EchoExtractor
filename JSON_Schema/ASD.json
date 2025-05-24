@@ -1,0 +1,57 @@
+{
+    "Assessment": {
+        "type": "object",
+        "properties": {
+            "Present": {
+                "enum": ["Yes", "No", "Not Assessed"],
+                "description": "Presence of ASD"
+            },
+            "Type": {
+                "enum": ["Secundum", "Primum", "Sinus Venosus", "Coronary Sinus", "Multiple", "Not Assessed"],
+                "description": "Anatomical classification of the ASD"
+            },
+            "Size": {
+                "enum": ["Small", "Moderate", "Large", "Not Assessed"],
+                "description": "Visual/quantitative estimation of the defect size"
+            },
+            "Shunt Direction": {
+                "enum": ["Left to Right", "Right to Left", "Bidirectional", "Not Assessed"],
+                "description": "Direction of shunting across the ASD"
+            },
+            "Septal Aneurysm": {
+                "enum": ["Yes", "No", "Not Assessed"],
+                "description": "Presence of aneurysmal movement of the interatrial septum"
+            },
+            "Associated Defects": {
+                "enum": ["None", "AV Canal", "Partial Anomalous Pulmonary Venous Return", "Other", "Not Assessed"],
+                "description": "Associated structural cardiac anomalies"
+            }
+        }
+    },
+    "Measurements": {
+        "type": "object",
+        "properties": {
+            "Diameter": {
+                "anyOf": [
+                    { "type": "number" },
+                    { "type": "string", "enum": ["Not Measured"] }
+                ],
+                "description": "Measured maximum diameter of the ASD (mm)"
+            },
+            "Peak Gradient": {
+                "anyOf": [
+                    { "type": "number" },
+                    { "type": "string", "enum": ["Not Measured"] }
+                ],
+                "description": "Peak pressure gradient across the ASD (mmHg)"
+            },
+            "Qp/Qs": {
+                "anyOf": [
+                    { "type": "number" },
+                    { "type": "string", "enum": ["Not Measured"] }
+                ],
+                "description": "Pulmonary to systemic flow ratio"
+            }
+        }
+    }
+}

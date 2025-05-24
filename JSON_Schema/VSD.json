@@ -1,0 +1,57 @@
+{
+    "Assessment": {
+        "type": "object",
+        "properties": {
+            "Present": {
+                "enum": ["Yes", "No", "Not Assessed"],
+                "description": "Presence of VSD"
+            },
+            "Location": {
+                "enum": ["Perimembranous", "Muscular", "Inlet", "Outlet", "Subpulmonary", "Multiple", "Not Assessed"],
+                "description": "Anatomical location of the VSD"
+            },
+            "Size": {
+                "enum": ["Small", "Moderate", "Large", "Not Assessed"],
+                "description": "Visual/quantitative size estimation of the VSD"
+            },
+            "Shunt Direction": {
+                "enum": ["Left to Right", "Right to Left", "Bidirectional", "Not Assessed"],
+                "description": "Direction of shunting across the VSD"
+            },
+            "Aneurysmal Tissue": {
+                "enum": ["Yes", "No", "Not Assessed"],
+                "description": "Presence of aneurysmal tissue surrounding the defect"
+            },
+            "Associated Defects": {
+                "enum": ["None", "AV Canal", "Tetralogy of Fallot", "Aortic Valve Prolapse", "Subaortic Stenosis", "Other", "Not Assessed"],
+                "description": "Associated structural cardiac anomalies"
+            }
+        }
+    },
+    "Measurements": {
+        "type": "object",
+        "properties": {
+            "Diameter": {
+                "anyOf": [
+                    { "type": "number" },
+                    { "type": "string", "enum": ["Not Measured"] }
+                ],
+                "description": "Diameter of the VSD as measured by imaging (mm)"
+            },
+            "Peak Gradient": {
+                "anyOf": [
+                    { "type": "number" },
+                    { "type": "string", "enum": ["Not Measured"] }
+                ],
+                "description": "Peak systolic gradient across the VSD (mmHg)"
+            },
+            "Qp/Qs": {
+                "anyOf": [
+                    { "type": "number" },
+                    { "type": "string", "enum": ["Not Measured"] }
+                ],
+                "description": "Pulmonary to Systemic Flow Ratio"
+            }
+        }
+    }
+}

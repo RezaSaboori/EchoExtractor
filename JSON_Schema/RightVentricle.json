@@ -1,0 +1,146 @@
+{
+    "Assessment": {
+        "type": "object",
+        "properties": {
+            "Size": {
+                "enum": [
+                    "Normal",
+                    "Top Normal",
+                    "Small",
+                    "Enlarged",
+                    "Mild Enlarged",
+                    "Mild to Moderate Enlarged",
+                    "Moderate Enlarged",
+                    "Moderate to Severe Enlarged",
+                    "Severe Enlarged",
+                    "Not Assessed"
+                ],
+                "description": "Right Ventricular size assessment"
+            },
+            "Systolic Function": {
+                "enum": [
+                    "Normal",
+                    "Preserved",
+                    "Mildly Reduced",
+                    "Mild to Moderately Reduced",
+                    "Moderately Reduced",
+                    "Moderate to Severely Reduced",
+                    "Severely Reduced",
+                    "Not Assessed"
+                ],
+                "description": "Right Ventricular systolic function assessment"
+            },
+            "Hypertrophy": {
+                "type": "object",
+                "properties": {
+                    "Presence": {
+                        "enum": [
+                            "No",
+                            "Yes",
+                            "Not Assessed"
+                        ],
+                        "description": "Presence of right ventricular hypertrophy"
+                    },
+                    "Severity": {
+                        "enum": [
+                            "Mild",
+                            "Moderate",
+                            "Severe",
+                            "Not Assessed"
+                        ],
+                        "description": "Severity of right ventricular hypertrophy"
+                    }
+                }
+            }
+        }
+    },
+    "Measurements": {
+        "type": "object",
+        "properties": {
+            "Dimensions": {
+                "Mid RV Diameter": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Mid Right Ventricular Diameter (cm)"
+                },
+                "Longitudinal RV Diameter": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Longitudinal Right Ventricular Diameter (cm)"
+                },
+                "RV Thickness": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Right Ventricular Free Wall Thickness (mm)"
+                },
+                "RVOT diameter (in SAX View)": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "RVOT diameter in Short Axis View (mm)"
+                },
+                "RVOT diameter (in PLAX View)": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "RVOT diameter in Parasternal Long Axis View (mm)"
+                }
+            },
+            "Areas": {
+                "RVED Area": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Right Ventricular End-Diastolic Area (cm\u00b2)"
+                },
+                "RVES Area": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Right Ventricular End-Systolic Area (cm\u00b2)"
+                },
+                "FAC": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Fractional Area Change (%)"
+                }
+            },
+            "Function Indices": {
+                "RV MPI": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Myocardial Performance Index (Tei Index) of RV"
+                },
+                "TAPSE": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Tricuspid Annular Plane Systolic Excursion (mm)"
+                },
+                "Sm": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Tricuspid Annular Peak Systolic Velocity (cm/sec)"
+                }
+            }
+        }
+    }
+}
+

@@ -1,0 +1,165 @@
+{
+    "Assessment": {
+        "type": "object",
+        "properties": {
+            "Shape": {
+                "enum": ["Normal", "Malcoapted", "Displaced Inferiorly", "Prolaptic", "Repaired", "Flail", "Displaced", "Not Assessed"],
+                "description": "Structural morphology of tricuspid valve"
+            },
+            "Stenosis": {
+                "type": "object",
+                "properties": {
+                    "Severity": {
+                        "enum": ["No", "Trivial", "Mild", "Mild to Moderate", "Moderate", "Moderate to Severe", "Severe", "Very Severe", "Not Assessed"],
+                        "description": "Severity of Tricuspid Stenosis (TS)"
+                    }
+                }
+            },
+            "Regurgitation": {
+                "type": "object",
+                "properties": {
+                    "Severity": {
+                        "enum": ["No", "Trivial", "Mild", "Mild to Moderate", "Moderate", "Moderate to Severe", "Severe", "Very Severe", "Not Assessed"],
+                        "description": "Severity of Tricuspid Regurgitation (TR)"
+                    },
+                    "Paravalvular Leak": {
+                        "enum": ["No", "Trivial", "Mild", "Mild to Moderate", "Moderate", "Moderate to Severe", "Severe", "Very Severe", "Not Assessed"],
+                        "description": "Severity of Paravalvular leak"
+                    },
+                    "Transvalvular Leak": {
+                        "enum": ["No", "Trivial", "Mild", "Mild to Moderate", "Moderate", "Moderate to Severe", "Severe", "Very Severe", "Not Assessed"],
+                        "description": "Severity of Transvalvular leak"
+                    }
+                }
+            },
+            "Prosthetic": {
+                "type": "object",
+                "properties": {
+                    "Present": {
+                        "enum": ["Yes", "No", "Not Assessed"],
+                        "description": "Presence of prosthetic tricuspid valve"
+                    },
+                    "Type": {
+                        "enum": ["Mechanical Bileaflet", "Mechanical Monoleaflet", "Bioprosthetic", "Not Applicable", "Not Assessed"],
+                        "description": "Type of prosthetic tricuspid valve"
+                    },
+                    "Function": {
+                        "enum": ["Good Function", "Malfunction", "Not Assessed"],
+                        "description": "Functional assessment of prosthetic valve"
+                    }
+                }
+            }
+        }
+    },
+    "Measurements": {
+        "type": "object",
+        "properties": {
+            "Dimensions": {
+                "Annulus Diameter": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Tricuspid Annulus Diameter (cm)"
+                },
+                "Annulus Area": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Tricuspid Annulus Area (cm\u00b2)"
+                }
+            },
+            "Regurgitation Parameters": {
+                "TR VC": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Tricuspid Regurgitation Vena Contracta (mm)"
+                },
+                "TR PISA Radius": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Tricuspid Regurgitation PISA Radius (mm)"
+                },
+                "TR PG": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Tricuspid Regurgitation Peak Gradient (mmHg)"
+                }
+            },
+            "Gradients (Tricuspid Valve Stenosis Hemodynamics)": {
+                "TV Mean Gradient": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Tricuspid Valve Mean Gradient (mmHg)"
+                },
+                "TV PHT": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Tricuspid Valve Pressure Half Time (ms)"
+                }
+            },
+            "Doppler Measurements": {
+                "TV E Velocity": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Tricuspid Valve E Velocity (m/s)"
+                },
+                "TV A Velocity": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Tricuspid Valve A Velocity (m/s)"
+                },
+                "TV E/A Ratio": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Tricuspid Valve E/A Ratio"
+                },
+                "TV Deceleration Time": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Tricuspid Valve Deceleration Time (ms)"
+                },
+                "E'": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Tricuspid Annulus E' Velocity (cm/sec)"
+                },
+                "A'": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Tricuspid Annulus A' Velocity (cm/sec)"
+                },
+                "E'/A' Ratio": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Tricuspid Annulus E'/A' Ratio"
+                }
+            }
+        }
+    }
+}

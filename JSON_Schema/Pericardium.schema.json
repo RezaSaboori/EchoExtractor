@@ -1,0 +1,73 @@
+{
+    "Assessment": {
+        "type": "object",
+        "properties": {
+            "Morphology": {
+                "enum": ["Normal", "Thickened", "Calcified", "Absent", "Not Assessed"],
+                "description": "Anatomical state of the pericardium"
+            },
+            "Effusion": {
+                "type": "object",
+                "properties": {
+                    "Presence": {
+                        "enum": ["No", "Yes", "Not Assessed"],
+                        "description": "Presence of pericardial effusion"
+                    },
+                    "Size": {
+                        "enum": ["Small", "Small to Moderate", "Moderate", "Moderate to Large", "Large", "Not Assessed"],
+                        "description": "Size/grade of pericardial effusion"
+                    },
+                    "Distribution": {
+                        "enum": ["Circumferential", "Posterior", "Anterior", "Localized", "Not Assessed"],
+                        "description": "Anatomical distribution of pericardial effusion"
+                    },
+                    "Hemodynamic Impact": {
+                        "enum": ["None", "Tamponade Physiology", "Effusive-Constrictive", "Not Assessed"],
+                        "description": "Hemodynamic consequence of the effusion"
+                    }
+                }
+            },
+            "Constrictive Pericarditis": {
+                "Presence": {
+                    "enum": ["Yes", "No", "Not Assessed"],
+                    "description": "Presence of constrictive physiology"
+                },
+                "Features": {
+                    "type": "list",
+                    "items": {
+                        "enum": ["Septal Bounce", "Respiratory Variation in AV inflow", "Annulus Reversus", "Annulus Paradoxus", "Dilated IVC with Reduced Collapse", "Not Assessed"],
+                        "description": "Echocardiographic features supportive of constriction"
+                    }
+                }
+            }
+        }
+    },
+    "Measurements": {
+        "type": "object",
+        "properties": {
+            "Pericardial Thickness": {
+                "anyOf": [
+                    { "type": "number" },
+                    { "type": "string", "enum": ["Not Measured"] }
+                ],
+                "description": "Thickness of pericardium (normal <2 mm) (mm)"
+            },
+            "Effusion Size": {
+                "Posterior": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Measurement of effusion posterior to LV (mm)"
+                },
+                "Anterior": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Measurement of effusion anterior to RV (mm)"
+                }
+            }
+        }
+    }
+}

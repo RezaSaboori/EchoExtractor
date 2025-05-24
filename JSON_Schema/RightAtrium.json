@@ -1,0 +1,141 @@
+{
+    "Assessment": {
+        "type": "object",
+        "properties": {
+            "Size": {
+                "enum": [
+                    "Normal",
+                    "Top Normal",
+                    "Enlarged",
+                    "Mild Enlarged",
+                    "Moderate Enlarged",
+                    "Severe Enlarged",
+                    "Not Assessed"
+                ],
+                "description": "Right Atrium size assessment"
+            },
+            "Spontaneous Echo Contrast (Smoke)": {
+                "enum": [
+                    "No",
+                    "Mild",
+                    "Moderate",
+                    "Severe",
+                    "Not Assessed"
+                ],
+                "description": "Presence and severity of spontaneous echo contrast (SEC or 'smoke')"
+            },
+            "Clot": {
+                "enum": [
+                    "No",
+                    "Small",
+                    "Large",
+                    "Not Assessed"
+                ],
+                "description": "Presence of thrombus in Right Atrium"
+            },
+            "Appendage (RAA)": {
+                "type": "object",
+                "properties": {
+                    "Spontaneous Echo Contrast": {
+                        "enum": [
+                            "No",
+                            "Mild",
+                            "Moderate",
+                            "Severe",
+                            "Not Assessed"
+                        ],
+                        "description": "Presence and severity of spontaneous echo contrast (SEC or 'smoke') in RAA"
+                    },
+                    "Clot": {
+                        "enum": [
+                            "No",
+                            "Small",
+                            "Large",
+                            "Not Assessed"
+                        ],
+                        "description": "Presence of clot in RAA"
+                    },
+                    "Closed in Previous Surgery": {
+                        "enum": [
+                            "Yes",
+                            "Partial",
+                            "No",
+                            "Unknown",
+                            "Not Assessed"
+                        ],
+                        "description": "Previous surgical closure of RAA"
+                    }
+                }
+            }
+        }
+    },
+    "Measurements": {
+        "type": "object",
+        "properties": {
+            "Diameter": {
+                "anyOf": [
+                    { "type": "number" },
+                    { "type": "string", "enum": ["Not Measured"] }
+                ],
+                "description": "Right Atrial Diameter (cm)"
+            },
+            "Area": {
+                "anyOf": [
+                    { "type": "number" },
+                    { "type": "string", "enum": ["Not Measured"] }
+                ],
+                "description": "Right Atrial Area (cm\u00b2)"
+            },
+            "Volumes": {
+                "Volume (4Ch View)": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Right Atrial Volume from 4-Chamber Apical View (cc)"
+                }
+            },
+            "Function Indices": {
+                "RA EF": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Right Atrial Ejection Fraction (%)"
+                },
+                "Active EF": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Active Ejection Fraction (%)"
+                },
+                "Passive EF": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Passive Ejection Fraction (%)"
+                }
+            },
+            "Strain Measures": {
+                "Global Strain (2D-STE)": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Global Strain by 2D Speckle Tracking Echocardiography (%)"
+                }
+            },
+            "Appendage (RAA)": {
+                "Velocity": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Right Atrial Appendage velocity (cm/sec)"
+                }
+            }
+        }
+    }
+}

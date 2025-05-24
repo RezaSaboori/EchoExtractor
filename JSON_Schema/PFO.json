@@ -1,0 +1,51 @@
+{
+
+    "Assessment": {
+        "type": "object",
+        "properties": {
+            "Present": {
+                "enum": ["Yes", "No", "Not Assessed"],
+                "description": "Presence of PFO"
+            },
+            "Size": {
+                "enum": ["Small", "Moderate", "Large", "Not Assessed"],
+                "description": "Visual/quantitative estimation of PFO size"
+            },
+            "Shunt Direction": {
+                "enum": ["Left to Right", "Right to Left", "Bidirectional", "Not Assessed"],
+                "description": "Direction of shunting through the PFO, may depend on provocative maneuvers"
+            },
+            "Associated Aneurysm": {
+                "enum": ["Yes", "No", "Not Assessed"],
+                "description": "Presence of atrial septal aneurysm (ASA) associated with the PFO"
+            },
+            "Bubble Study": {
+                "enum": ["Positive", "Negative", "Not Performed", "Not Assessed"],
+                "description": "Result of contrast bubble test used to detect right-to-left shunt"
+            },
+            "Associated Defects": {
+                "enum": ["None", "ASD", "Aneurysmal Septum", "Chiari Network", "Other", "Not Assessed"],
+                "description": "Other structural anomalies associated with PFO"
+            }
+        }
+    },
+    "Measurements": {
+        "type": "object",
+        "properties": {
+            "Tunnel Length": {
+                "anyOf": [
+                    { "type": "number" },
+                    { "type": "string", "enum": ["Not Measured"] }
+                ],
+                "description": "Length of the PFO tunnel measured in millimeters (mm)"
+            },
+            "Qp/Qs": {
+                "anyOf": [
+                    { "type": "number" },
+                    { "type": "string", "enum": ["Not Measured"] }
+                ],
+                "description": "Pulmonary to systemic flow ratio"
+            }
+        }
+    }
+}

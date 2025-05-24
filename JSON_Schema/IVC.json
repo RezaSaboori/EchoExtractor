@@ -1,0 +1,42 @@
+{
+    "Assessment": {
+        "type": "object",
+        "properties": {
+            "Size": {
+                "enum": ["Normal", "Small", "Dilated", "Plethoric", "Not Assessed"],
+                "description": "Inferior Vena Cava size based on diameter and collapsibility"
+            },
+            "Respiratory Variation": {
+                "enum": [">50%", "<50%", ">30%", "<30%", "Absent", "Not Assessed"],
+                "description": "Collapsibility index with respiratory effort"
+            },
+            "IVC Plethora": {
+                "enum": ["Yes", "No", "Not Assessed"],
+                "description": "Visual assessment of IVC plethora (lack of inspiratory collapse)"
+            },
+            "Sniff Test Result": {
+                "enum": ["Normal Collapse", "Reduced Collapse", "No Collapse", "Not Performed", "Not Assessed"],
+                "description": "Visual result of IVC collapse with a sniff maneuver"
+            }
+        }
+    },
+    "Measurements": {
+        "type": "object",
+        "properties": {
+            "Diameter": {
+                "anyOf": [
+                    { "type": "number" },
+                    { "type": "string", "enum": ["Not Measured"] }
+                ],
+                "description": "Inferior Vena Cava maximal diameter (end-expiration) (cm)"
+            },
+            "Collapsibility Index": {
+                "anyOf": [
+                    { "type": "number" },
+                    { "type": "string", "enum": ["Not Measured"] }
+                ],
+                "description": "Percent reduction in IVC diameter during inspiration (%)"
+            }
+        }
+    }
+}

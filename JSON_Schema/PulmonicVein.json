@@ -1,0 +1,50 @@
+{
+    "Assessment": {
+        "type": "object",
+        "properties": {
+            "Venous Drainage": {
+                "enum": ["Normal", "Abnormal", "Not Assessed"],
+                "description": "Pattern of pulmonary venous drainage into the left atrium"
+            },
+            "Inflow Pattern": {
+                "enum": ["S > D", "S = D", "S < D", "Blunted S Wave", "Systolic Flow Reversal", "Not Assessed"],
+                "description": "Pulmonary vein flow pattern based on spectral Doppler (S and D wave relationship)"
+            }
+        }
+    },
+    "Measurements": {
+        "type": "object",
+        "properties": {
+            "Doppler Measurements": {
+                "Peak S Velocity": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Peak systolic (S wave) flow velocity (cm/sec)"
+                },
+                "Peak D Velocity": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Peak diastolic (D wave) flow velocity (cm/sec)"
+                },
+                "Peak AR Velocity": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Peak Atrial Reversal (AR wave) velocity (cm/sec)"
+                }
+            },
+            "AR Duration": {
+                "anyOf": [
+                    { "type": "number" },
+                    { "type": "string", "enum": ["Not Measured"] }
+                ],
+                "description": "Duration of atrial reversal wave (AR) in milliseconds (ms)"
+            }
+        }
+    }
+}

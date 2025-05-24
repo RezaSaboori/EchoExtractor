@@ -1,0 +1,324 @@
+{
+    "Assessment": {
+        "type": "object",
+        "properties": {
+            "Size": {
+                "enum": [
+                    "Normal",
+                    "Small",
+                    "Enlarged",
+                    "Mild Enlarged",
+                    "Mild to Moderate Enlarged",
+                    "Moderate Enlarged",
+                    "Moderate to Severe Enlarged",
+                    "Severe Enlarged",
+                    "Not Assessed"
+                ],
+                "description": "Left Ventricular size assessment"
+            },
+            "Systolic Function": {
+                "enum": [
+                    "Normal",
+                    "Reduced",
+                    "Mildly Reduced",
+                    "Mild to Moderately Reduced",
+                    "Moderately Reduced",
+                    "Moderate to Severely Reduced",
+                    "Severely Reduced",
+                    "Not Assessed"
+                ],
+                "description": "Systolic function assessment"
+            },
+            "Diastolic Function": {
+                "enum": [
+                    "Normal",
+                    "Grade I",
+                    "Grade II",
+                    "Grade III",
+                    "Grade IV",
+                    "Not Assessed"
+                ],
+                "description": "Diastolic function grade (Grade I = Impaired Relaxation, Grade II = Pseudonormal, Grade III = Restrictive - Reversible, Grade IV = Restrictive - Irreversible)"
+            },
+            "Hypertrophy": {
+                "type": "object",
+                "properties": {
+                    "Type": {
+                        "enum": [
+                            "No",
+                            "Concentric Remodeling",
+                            "Concentric",
+                            "Eccentric",
+                            "Not Assessed"
+                        ],
+                        "description": "Hypertrophy type assessment"
+                    },
+                    "Severity": {
+                        "enum": [
+                            "Mild",
+                            "Mild to Moderate",
+                            "Moderate",
+                            "Moderate to Severe",
+                            "Severe",
+                            "Not Assessed"
+                        ],
+                        "description": "Hypertrophy severity assessment"
+                    }
+                }
+            },
+            "Wall Motion Abnormality": {
+                "type": "object",
+                "properties": {
+                    "Type": {
+                        "enum": [
+                            "No",
+                            "Global Hypokinesia",
+                            "RWMA",
+                            "Not Assessed"
+                        ],
+                        "description": "Wall motion abnormality type"
+                    },
+                    "Regions": {
+                        "type": "list",
+                        "items": {
+                            "enum": [
+                                "Inferoseptum_Base",
+                                "Inferoseptum_Mid",
+                                "Inferoseptum_Apex",
+                                "Anterolateral_Base",
+                                "Anterolateral_Mid",
+                                "Anterolateral_Apex",
+                                "Inferior_Base",
+                                "Inferior_Mid",
+                                "Inferior_Apex",
+                                "Anterior_Base",
+                                "Anterior_Mid",
+                                "Anterior_Apex",
+                                "Anteroseptum_Base",
+                                "Anteroseptum_Mid",
+                                "Inferolateral_Base",
+                                "Inferolateral_Mid",
+                                "Posterior Circulation",
+                                "Inferior Circulation",
+                                "Not Assessed"
+                        ],
+                            "description": "Wall motion abnormality regions"
+                        }
+                    }
+                }
+            },
+            "Clot": {
+                "enum": [
+                    "Yes",
+                    "No",
+                    "Not Assessed"
+                ],
+                "description": "Presence of thrombus in Left Ventricle"
+            },
+            "ASH": {
+                "enum": [
+                    "Yes",
+                    "No",
+                    "Not Assessed"
+                ],
+                "description": "Presence of Asymmetric septal hypertrophy in Left Ventricle"
+            }
+        }
+    },
+    "Measurements": {
+        "type": "object",
+        "properties": {
+            "EF": {
+                "Value": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Ejection Fraction (%)"
+                },
+                "Method": {
+                    "enum": [
+                        "Eye ball",
+                        "Simpson"
+                    ],
+                    "description": "Method of EF measurement"
+                }
+            },
+            "Diameter": {
+                "LVEDd": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "LV End-Diastolic Diameter (cm)"
+                },
+                "LVESd": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "LV End-Systolic Diameter (cm)"
+                },
+                "IVSd": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Interventricular Septum Diameter (cm)"
+                },
+                "PWD": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Posterior Wall Diameter (cm)"
+                }
+            },
+            "Volumes": {
+                "LVEDV": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Left Ventricle End-Diastolic Volume (cc)"
+                },
+                "LVESV": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Left Ventricle End-Systolic Volume (cc)"
+                },
+                "LVEDDI": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Left Ventricle End-Diastolic Diameter Index (cm/m\u00b2)"
+                },
+                "LVEDVI": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Left Ventricle End-Diastolic Volume Index (cc/m\u00b2)"
+                }
+            },
+            "Function Indices": {
+                "FS": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Fractional Shortening (Percentage change in LV internal diameter between diastole and systole (%)"
+                },
+                "Tei Index": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "myocardial performance index"
+                },
+                "dP/dt": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Rate of rise of LV pressure during isovolumetric contraction"
+                },
+                "Sphericity Index": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "sphericity index (Ratio comparing the LV's long and short axis dimensions)"
+                }
+            },
+            "Strain Measures": {
+                "Global longitudinal strain": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Average percentage of myocardial shortening in the longitudinal plane (%)"
+                },
+                "Longitudinal Strain (4ch)": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Strain measured in the apical four-chamber view (%)"
+                },
+                "Longitudinal Strain (2ch)": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Strain from the apical two-chamber view (%)"
+                },
+                "Longitudinal Strain (Apical Long axis)": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Strain from the apical long-axis (3-chamber) view (%)"
+                }
+            },
+            "Regional Wall MotionScores": {
+                "RWMSI": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Regional Wall Motion Score Index"
+                },
+                "RWMS": {
+                    "type": "list",
+                    "items": {
+                        "Region": {
+                            "type": "string",
+                            "enum": [
+                                "Inferoseptum_Base",
+                                "Inferoseptum_Mid",
+                                "Inferoseptum_Apex",
+                                "Anterolateral_Base",
+                                "Anterolateral_Mid",
+                                "Anterolateral_Apex",
+                                "Inferior_Base",
+                                "Inferior_Mid",
+                                "Inferior_Apex",
+                                "Anterior_Base",
+                                "Anterior_Mid",
+                                "Anterior_Apex",
+                                "Anteroseptum_Base",
+                                "Anteroseptum_Mid",
+                                "Inferolateral_Base",
+                                "Inferolateral_Mid"
+                            ],
+                            "description": "LV segment name (AHA 17-segment model)"
+                        },
+                        "Score": {
+                            "anyOf": [
+                                { "type": "number" },
+                                { "type": "string", "enum": ["Not Measured"] }
+                            ],
+                            "description": "Numeric score (1 = Normal, 2 = Hypokinetic, 3 = Severely Hypokinetic, 4 = Akinetic, 5 = Dyskinetic)"
+                        }
+                    }
+                }
+            },
+            "Mass": {
+                "type": "object",
+                "properties": {
+                    "Value": {
+                        "anyOf": [
+                            { "type": "number" },
+                            { "type": "string", "enum": ["Not Measured"] }
+                        ],
+                        "description": "Left Ventricular Mass (gr)"
+                    }
+                }
+            }
+        }
+    }
+}

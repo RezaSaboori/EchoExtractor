@@ -1,0 +1,156 @@
+{
+    "Assessment": {
+        "type": "object",
+        "properties": {
+            "Shape": {
+                "enum": ["Normal", "Thickened", "Calcified", "Prolaptic", "Repaired", "Flail", "Tricuspid", "Bicuspid", "Not Assessed"],
+                "description": "Structural morphology of aortic valve"
+            },
+            "Stenosis": {
+                "type": "object",
+                "properties": {
+                    "Severity": {
+                        "enum": ["No", "Trivial", "Mild", "Mild to Moderate", "Moderate", "Moderate to Severe", "Severe", "Very Severe", "Not Assessed"],
+                        "description": "Severity of Aortic Stenosis (AS)"
+                    }
+                }
+            },
+            "Regurgitation": {
+                "type": "object",
+                "properties": {
+                    "Severity": {
+                        "enum": ["No", "Trivial", "Mild", "Mild to Moderate", "Moderate", "Moderate to Severe", "Severe", "Very Severe", "Not Assessed"],
+                        "description": "Severity of Aortic Regurgitation (AR)"
+                    },
+                    "Paravalvular Leak": {
+                        "enum": ["No", "Trivial", "Mild", "Mild to Moderate", "Moderate", "Moderate to Severe", "Severe", "Very Severe", "Not Assessed"],
+                        "description": "Severity of Paravalvular leak"
+                    },
+                    "Transvalvular Leak": {
+                        "enum": ["No", "Trivial", "Mild", "Mild to Moderate", "Moderate", "Moderate to Severe", "Severe", "Very Severe", "Not Assessed"],
+                        "description": "Severity of Transvalvular leak"
+                    }
+                }
+            },
+            "Prosthetic": {
+                "type": "object",
+                "properties": {
+                    "Present": {
+                        "enum": ["Yes", "No", "Not Assessed"],
+                        "description": "Presence of prosthetic aortic valve"
+                    },
+                    "Type": {
+                        "enum": ["Mechanical Bileaflet", "Mechanical Monoleaflet", "Bioprosthetic", "Not Applicable", "Not Assessed"],
+                        "description": "Type of prosthetic aortic valve"
+                    },
+                    "Function": {
+                        "enum": ["Good Function", "Malfunction", "Not Assessed"],
+                        "description": "Functional assessment of prosthetic valve"
+                    }
+                }
+            }
+        }
+    },
+    "Measurements": {
+        "type": "object",
+        "properties": {
+            "Area": {
+                "anyOf": [
+                    { "type": "number" },
+                    { "type": "string", "enum": ["Not Measured"] }
+                ],
+                "description": "Aortic Valve Area (AVA) (cm\u00b2"
+            },
+            "Regurgitation Parameters": {
+                "AR RV": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Aortic Regurgitation Regurgitant Volume (ml)"
+                },
+                "AR ROA": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Regurgitant Orifice Area (cm\u00b2)"
+                },
+                "VC": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Vena Contracta Width (mm)"
+                },
+                "AR PHT": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Aortic Regurgitation Pressure Half Time (ms)"
+                }
+            },
+            "Gradients (Aortic Valve Stenosis Hemodynamics)": {
+                "Peak Velocity": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Aortic Peak Velocity (m/s)"
+                },
+                "LVOT Peak Velocity": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Left Ventricular Outflow Tract Peak Velocity (m/s)"
+                },
+                "LVOT/Ao Peak Velocity Ratio": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Left Ventricular Outflow Tract to Aortic Peak Velocity Ratio"
+                },
+                "Pressure Recovery": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Estimated Pressure Recovery Gradient (mmHg)"
+                },
+                "Aortic  PPG": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Aortic Peak Pressure Gradient (mmHg)"
+                },
+                "Aortic  MPG": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Aortic Mean Pressure Gradient (mmHg)"
+                }
+            },
+            "Doppler Measurements": {
+                "Aortic  VTI": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Aortic Velocity Time Integral (cm)"
+                },
+                "LVOT VTI": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Left Ventricular Outflow Tract Velocity Time Integral (cm)"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,79 @@
+{
+    "Assessment": {
+        "type": "object",
+        "properties": {
+            "Morphology": {
+                "type": "list",
+                "items": { 
+                    "Segment": {
+                        "enum": [
+                            "Ascending Aorta","Aortic Arch","Descending Aorta"
+                        ],
+                        "description": "Segment of the thoracic aorta"
+                    },
+                    "Morphology": {
+                        "enum": [
+                            "Normal","Dilated","Replaced by Tube Graft","Aneurysmal","Not Assessed"
+                        ],
+                        "description": "Morphological state of the specified segment"
+                }
+            }
+
+            },
+            "Flow": {
+                "type": "list",
+                "items": {
+                    "Segment": {
+                        "enum": [
+                            "Thoracic Descending Aorta","Abdominal Aorta"
+                        ],
+                        "description": "Aortic segment in which flow is assessed"
+                    },
+                    "Pattern": {
+                        "enum": [
+                            "Normal","Holo Diastolic Reversal","Early Diastolic Reversal","Holo Antegrade Diastolic","Early Antegrade Diastolic","Not Assessed"
+                        ],
+                        "description": "Flow pattern in the specified aortic segment"
+                    }
+                }
+            },
+            "Atherosclerotic Changes": {
+                "enum": ["Yes", "No", "Not Assessed"],
+                "description": "Presence of atherosclerotic changes"
+            },
+            "Right Sided Aortic Arch": {
+                "enum": ["Yes", "No", "Not Assessed"],
+                "description": "Right-sided aortic arch anatomical variant"
+            }
+        }
+    },
+    "Measurements": {
+        "type": "object",
+        "properties": {
+            "Dimensions": {
+                "Segment": {
+                    "enum": [
+                        "Aortic Annulus","Sinuses of Valsalva (SOV)","Sinotubular Junction (STJ)","Ascending Aorta","Aortic Arch","Descending Aorta","Abdominal Aorta"
+                    ],
+                    "description": "Anatomical segment where diameter is measured"
+                },
+                "Diameter": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Measured diameter of the segment (cm)"
+                }
+            },
+            "Distances": {
+                "Annulus to STJ": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Distance from aortic annulus to sinotubular junction (cm)"
+                }
+            }
+        }
+    }
+}

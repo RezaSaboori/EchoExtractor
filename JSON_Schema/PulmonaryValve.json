@@ -1,0 +1,174 @@
+{
+    "Assessment": {
+        "type": "object",
+        "properties": {
+            "Shape": {
+                "enum": ["Normal", "Thickened", "Hypoplastic", "Atretic", "Repaired", "Flail", "A Remnant", "Not Assessed"],
+                "description": "Structural morphology of pulmonary valve"
+            },
+            "Stenosis": {
+                "type": "object",
+                "properties": {
+                    "Severity": {
+                        "enum": ["No", "Trivial", "Mild", "Mild to Moderate", "Moderate", "Moderate to Severe", "Severe", "Very Severe", "Not Assessed"],
+                        "description": "Severity of Pulmonary Stenosis (PS)"
+                    }
+                }
+            },
+            "Regurgitation": {
+                "type": "object",
+                "properties": {
+                    "Severity": {
+                        "enum": ["No", "Trivial", "Mild", "Mild to Moderate", "Moderate", "Moderate to Severe", "Severe", "Very Severe", "Not Assessed"],
+                        "description": "Severity of Pulmonary Regurgitation (PI)"
+                    },
+                    "Paravalvular Leak": {
+                        "enum": ["No", "Trivial", "Mild", "Mild to Moderate", "Moderate", "Moderate to Severe", "Severe", "Very Severe", "Not Assessed"],
+                        "description": "Severity of Paravalvular Leak"
+                    },
+                    "Transvalvular Leak": {
+                        "enum": ["No", "Trivial", "Mild", "Mild to Moderate", "Moderate", "Moderate to Severe", "Severe", "Very Severe", "Not Assessed"],
+                        "description": "Severity of Transvalvular Leak"
+                    }
+                }
+            },
+            "Prosthetic": {
+                "type": "object",
+                "properties": {
+                    "Present": {
+                        "enum": ["Yes", "No", "Not Assessed"],
+                        "description": "Presence of prosthetic pulmonary valve"
+                    },
+                    "Type": {
+                        "enum": ["Mechanical Bileaflet", "Mechanical Monoleaflet", "Bioprosthetic", "Not Applicable", "Not Assessed"],
+                        "description": "Type of prosthetic pulmonary valve"
+                    },
+                    "Function": {
+                        "enum": ["Good Function", "Malfunction", "Not Assessed"],
+                        "description": "Functional assessment of prosthetic pulmonary valve"
+                    }
+                }
+            }
+        }
+    },
+    "Measurements": {
+        "type": "object",
+        "properties": {
+            "Dimensions": {
+                "PA Annulus": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Pulmonary Artery Annulus Diameter (cm)"
+                },
+                "Main PA": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Main Pulmonary Artery Diameter (cm)"
+                },
+                "LPA Diameter": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Left Pulmonary Artery Diameter (cm)"
+                },
+                "RPA Diameter": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Right Pulmonary Artery Diameter (cm)"
+                }
+            },
+            "Regurgitation Parameters": {
+                "PR PHT": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Pulmonary Regurgitation Pressure Half Time (ms)"
+                }
+            },
+            "Gradients (Pulmonary Valve Stenosis Hemodynamics)": {
+                "PV Peak Velocity": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Pulmonary Valve Peak Velocity (m/s)"
+                },
+                "PV PPG": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Pulmonary Valve Peak Pressure Gradient (mmHg)"
+                },
+                "PV MPG": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Pulmonary Valve Mean Pressure Gradient (mmHg)"
+                }
+            },
+            "Doppler Measurements": {
+                "PV VTI": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Pulmonary Valve Velocity Time Integral (cm)"
+                },
+                "RVOT VTI": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Right Ventricular Outflow Tract Velocity Time Integral (cm)"
+                },
+                "Pulmonary Acc Time": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Pulmonary Acceleration Time (ms)"
+                }
+            },
+            "Hemodynamic Pressures": {
+                "Mean PAP": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Mean Pulmonary Artery Pressure (mmHg)"
+                },
+                "RA Pressure": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Right Atrial Pressure (mmHg)"
+                },
+                "RVSP": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Right Ventricular Systolic Pressure (mmHg)"
+                },
+                "PAP": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Pulmonary Artery Pressure (mmHg)"
+                }
+            }
+        }
+    }
+}

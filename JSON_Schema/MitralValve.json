@@ -1,0 +1,243 @@
+{
+    "Assessment": {
+        "type": "object",
+        "properties": {
+            "Shape": {
+                "enum": ["Normal", "Thickened", "Calcified", "Prolaptic", "Myxomatous", "Repaired", "Flail", "Not Assessed"],
+                "description": "Structural morphology of mitral valve"
+            },
+            "SAM": {
+                "enum": ["No", "Mild", "Moderate", "Severe", "Not Assessed"],
+                "description": "Presence and severity of Systolic Anterior Motion (SAM)"
+            },
+            "Stenosis": {
+                "type": "object",
+                "properties": {
+                    "Severity": {
+                        "enum": ["No", "Trivial", "Mild", "Mild to Moderate", "Moderate", "Moderate to Severe", "Severe", "Very Severe", "Not Assessed"],
+                        "description": "Severity of Mitral Stenosis (MS)"
+                    }
+                }
+            },
+            "Regurgitation": {
+                "type": "object",
+                "properties": {
+                    "Severity": {
+                        "enum": ["No", "Trivial", "Mild", "Mild to Moderate", "Moderate", "Moderate to Severe", "Severe", "Very Severe", "Not Assessed"],
+                        "description": "Severity of Mitral Regurgitation (MR)"
+                    },
+                    "Paravalvular Leak": {
+                        "enum": ["No", "Trivial", "Mild", "Mild to Moderate", "Moderate", "Moderate to Severe", "Severe", "Very Severe", "Not Assessed"],
+                        "description": "Severity of Paravalvular leak"
+                    },
+                    "Transvalvular Leak": {
+                        "enum": ["No", "Trivial", "Mild", "Mild to Moderate", "Moderate", "Moderate to Severe", "Severe", "Very Severe", "Not Assessed"],
+                        "description": "Severity of Transvalvular leak"
+                    }
+                }
+            },
+            "Prosthetic": {
+                "type": "object",
+                "properties": {
+                    "Present": {
+                        "enum": ["Yes", "No", "Not Assessed"],
+                        "description": "Presence of prosthetic mitral valve"
+                    },
+                    "Type": {
+                        "enum": ["Mechanical Bileaflet", "Mechanical Monoleaflet", "Bioprosthetic", "Not Applicable", "Not Assessed"],
+                        "description": "Type of prosthetic mitral valve"
+                    },
+                    "Function": {
+                        "enum": ["Good Function", "Malfunction", "Not Assessed"],
+                        "description": "Functional assessment of prosthetic valve"
+                    }
+                }
+            }
+        }
+    },
+    "Measurements": {
+        "type": "object",
+        "properties": {
+            "Area": {
+                "anyOf": [
+                    { "type": "number" },
+                    { "type": "string", "enum": ["Not Measured"] }
+                ],
+                "description": "Mitral Valve Area"
+            },
+            "Dimensions": {
+                "Annulus Diameter": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Mitral Valve Annulus Diameter (cm)"
+                },
+                "AMVL Length": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Anterior Mitral Valve Leaflet Length (cm)"
+                },
+                "PMVL Length": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Posterior Mitral Valve Leaflet Length (cm)"
+                }
+            },
+            "Regurgitation Parameters": {
+                "MR RV": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Regurgitant Volume (ml)"
+                },
+                "MR ROA": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Regurgitant Orifice Area (cm\u00b2)"
+                },
+                "MR VC Area": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Vena Contracta Area (cm\u00b2)"
+                }
+            },
+            "Gradients (Mitral Stenosis Hemodynamics)": {
+                "Mean Gradient": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Mean Pressure Gradient (mmHg)"
+                },
+                "PHT": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Pressure Half Time (ms)"
+                }
+            },
+            "Morpho-Functional Indices": {
+                "Tenting Area": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Area between mitral leaflets and annular plane during systole (cm\u00b2)"
+                },
+                "Coaptation Depth": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Distance from annular plane to leaflet coaptation point (mm)"
+                },
+                "IVRT": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Isovolumic Relaxation Time (Time interval between aortic valve closure and mitral valve opening (ms)"
+                }
+            },
+            "Doppler Measurements (Diastolic Function)": {
+                "E` Septal": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "E' wave (Early diastolic (ventricular)) velocity in septal direction (cm/sec)"
+                },
+                "E` Lateral": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "E' wave (Early diastolic (ventricular)) velocity in lateral direction (cm/sec)"
+                },
+                "A`": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "A' wave (Late diastolic (atrial)) velocity at the mitral annulus (cm/sec)"
+                },
+                "S`": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Average S' (Lateral & Septal) wave (late diastolic) velocity of mitral annulus (cm/sec)"
+                },
+                "MVE": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Mitral Valve E-wave velocity (m/s)"
+                },
+                "VTI": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Mitral Valve Velocity Time Integral (cm)"
+                },
+                "Vp": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Velocity of Propagation (cm/sec)"
+                },
+                "E/A Ratio": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "E to A Ratio"
+                },
+                "E/e' Ratio": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "E to e' Ratio"
+                },
+                "Deceleration Time": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Time interval E to its baseline (ms)"
+                }
+            },
+            "Annulus Motion": {
+                "MAPSE": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Mitral Annular Plane Systolic Excursion (cm)"
+                },
+                "TMAD": {
+                    "anyOf": [
+                        { "type": "number" },
+                        { "type": "string", "enum": ["Not Measured"] }
+                    ],
+                    "description": "Tissue Motion Annular Displacement (mm)"
+                }
+            }
+        }
+    }
+}
