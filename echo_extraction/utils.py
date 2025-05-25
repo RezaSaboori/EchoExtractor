@@ -3,8 +3,6 @@ import json
 import textwrap
 import os
 
-LOG_FILE_DIR = "/storage03/Saboori/Echo/Extractor/main_app/logs"
-
 logger = logging.getLogger(__name__)
 
 class BookLogFilter(logging.Filter):

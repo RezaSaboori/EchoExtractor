@@ -2,8 +2,9 @@ from enum import Enum
 from typing import List, Union, Literal
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 
-
-# ── Shared Models ────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Shared Models
+#------------------------------------------------------------------------------
 MeasurementValue = Union[float, int, Literal["Not Measured"]]
 
 common_model_config = ConfigDict(
@@ -16,9 +17,12 @@ common_model_config = ConfigDict(
 
 
 
-
-# ── Left Ventricle ────────────────────────────────────────────────────────────
-# ── Left Ventricle Enums ──────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Left Ventricle
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+# Left Ventricle Enums
+#------------------------------------------------------------------------------
 class LVSizeEnum(str, Enum):
     """Enumeration for Left Ventricular size assessment."""
     NORMAL = "Normal"
@@ -115,7 +119,9 @@ class LVEFMethodEnum(str, Enum):
     SIMPSON = "Simpson"
 
 
-# ── Left Ventricle Assessment Models ────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Left Ventricle Assessment Models
+#------------------------------------------------------------------------------
 class LVHypertrophy(BaseModel):
     """Model for Left Ventricular hypertrophy assessment."""
     model_config = common_model_config
@@ -177,7 +183,9 @@ class LVAssessment(BaseModel):
     )
 
 
-# ── Left Ventricle Measurement Models ────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Left Ventricle Measurement Models
+#------------------------------------------------------------------------------
 
 class LVEjectionFraction(BaseModel):
     """Quantitative measurements of Ejection Fraction."""
@@ -193,7 +201,6 @@ class LVEjectionFraction(BaseModel):
         description="Method of EF measurement"
     )
 
-    # Field-level validator: If value is invalid, only default value, not the whole model
     @field_validator("value", mode="before")
     @classmethod
     def validate_ef_value(cls, v, info):
@@ -493,7 +500,9 @@ class LVMeasurements(BaseModel):
         description="Left Ventricular Mass"
     )
 
-# ── Left Ventricle Root ────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Left Ventricle Root
+#------------------------------------------------------------------------------
 class LeftVentricle(BaseModel):
     """Top-level model for the Left Ventricle section of the echo report."""
     model_config = common_model_config
@@ -512,8 +521,12 @@ class LeftVentricle(BaseModel):
 
 
 
-# ── Right Ventricle ───────────────────────────────────────────────────────────
-# ── Right Ventricle Enums ───────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Right Ventricle
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+# Right Ventricle Enums
+#------------------------------------------------------------------------------
 class RVSizeEnum(str, Enum):
     """Enumeration for Right Ventricular size assessment."""
     NORMAL = "Normal"
@@ -552,7 +565,10 @@ class RVHypertrophySeverityEnum(str, Enum):
     NOT_ASSESSED = "Not Assessed"
 
 
-# ── Right Ventricle Assessment Models ───────────────────────────────────────────
+
+#------------------------------------------------------------------------------
+# Right Ventricle Assessment Models
+#------------------------------------------------------------------------------
 class RVHypertrophy(BaseModel):
     """Model for Right Ventricular hypertrophy assessment."""
     model_config = common_model_config
@@ -585,8 +601,9 @@ class RVAssessment(BaseModel):
     )
 
 
-# ── Right Ventricle Measurement Models ───────────────────────────────────────────
-
+#------------------------------------------------------------------------------
+# Right Ventricle Measurement Models
+#------------------------------------------------------------------------------
 class RVDimensions(BaseModel):
     """Quantitative measurements of Right Ventricular dimensions."""
     model_config = common_model_config
@@ -766,7 +783,9 @@ class RVMeasurements(BaseModel):
         description="Right Ventricular function indices"
     )
 
-# ── Right Ventricle Root ───────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Right Ventricle Root
+#------------------------------------------------------------------------------
 class RightVentricle(BaseModel):
     """Top-level model for the Right Ventricle section of the echo report."""
     model_config = common_model_config
@@ -784,8 +803,12 @@ class RightVentricle(BaseModel):
 
 
 
-# ── Left Atrium ───────────────────────────────────────────────────────────────
-# ── Left Atrium Enums ───────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Left Atrium
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+# Left Atrium Enums
+#------------------------------------------------------------------------------
 class LASizeEnum(str, Enum):
     """Enumeration for Left Atrium size assessment."""
     NORMAL = "Normal"
@@ -835,7 +858,9 @@ class LAACClosedInPreviousSurgeryEnum(str, Enum):
     NOT_ASSESSED = "Not Assessed"
 
 
-# ── Left Atrium Assessment Models ─────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Left Atrium Assessment Models
+#------------------------------------------------------------------------------
 class LAAppendageAssessment(BaseModel):
     """Model for Left Atrial Appendage assessment details."""
     model_config = common_model_config
@@ -880,8 +905,9 @@ class LAAssessment(BaseModel):
     )
 
 
-# ── Left Atrium Measurement Models ─────────────────────────────────────────────
-
+#------------------------------------------------------------------------------
+# Left Atrium Measurement Models
+#------------------------------------------------------------------------------
 class LAVolumes(BaseModel):
     """Quantitative measurements of Left Atrial volumes."""
     model_config = common_model_config
@@ -1068,7 +1094,9 @@ class LAMeasurements(BaseModel):
             return "Not Measured"
 
 
-# ── Left Atrium Root ───────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Left Atrium Root
+#------------------------------------------------------------------------------
 class LeftAtrium(BaseModel):
     """Top-level model for the Left Atrium section of the echo report."""
     model_config = common_model_config
@@ -1087,8 +1115,12 @@ class LeftAtrium(BaseModel):
 
 
 
-# ── Right Atrium ──────────────────────────────────────────────────────────────
-# ── Right Atrium Enums ──────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Right Atrium
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+# Right Atrium Enums
+#------------------------------------------------------------------------------
 class RASizeEnum(str, Enum):
     """Enumeration for Right Atrium size assessment."""
     NORMAL = "Normal"
@@ -1138,7 +1170,9 @@ class RAACClosedInPreviousSurgeryEnum(str, Enum):
     NOT_ASSESSED = "Not Assessed"
 
 
-# ── Right Atrium Assessment Models ─────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Right Atrium Assessment Models
+#------------------------------------------------------------------------------
 class RAAppendageAssessment(BaseModel):
     """Model for Right Atrial Appendage assessment details."""
     model_config = common_model_config
@@ -1183,8 +1217,9 @@ class RAAssessment(BaseModel):
     )
 
 
-# ── Right Atrium Measurement Models ─────────────────────────────────────────────
-
+#------------------------------------------------------------------------------
+# Right Atrium Measurement Models
+#------------------------------------------------------------------------------
 class RAVolumes(BaseModel):
     """Quantitative measurements of Right Atrial volumes."""
     model_config = common_model_config
@@ -1377,7 +1412,9 @@ class RAMeasurements(BaseModel):
             return "Not Measured"
 
 
-# ── Right Atrium Root ──────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Right Atrium Root
+#------------------------------------------------------------------------------
 class RightAtrium(BaseModel):
     """Top-level model for the Right Atrium section of the echo report."""
     model_config = common_model_config
@@ -1408,8 +1445,12 @@ class RightAtrium(BaseModel):
 
 
 
-# ── Pericardium  ───────────────────────────────────────────────────────────────
-# ── Pericardium Enums ───────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Pericardium
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+# Pericardium Enums
+#------------------------------------------------------------------------------
 class PericardiumMorphologyEnum(str, Enum):
     """Enumeration for pericardial morphology."""
     NORMAL = "Normal"
@@ -1457,7 +1498,9 @@ class ConstrictivePericarditisFeatureEnum(str, Enum):
     DILATED_IVC_WITH_REDUCED_COLLAPSE = "Dilated IVC with Reduced Collapse"
     NOT_ASSESSED = "Not Assessed"
 
-# ── Pericardium Assessment Models ─────────────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Pericardium Assessment Models
+#------------------------------------------------------------------------------
 class Effusion(BaseModel):
     """Model for pericardial effusion details."""
     model_config = common_model_config
@@ -1493,7 +1536,9 @@ class ConstrictivePericarditis(BaseModel):
     )
 
 
-# ── Full Pericardium Assessment Root ─────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Full Pericardium Assessment Root
+#------------------------------------------------------------------------------
 class PericardiumAssessment(BaseModel):
     """Overall assessment of the pericardium."""
     model_config = common_model_config
@@ -1511,7 +1556,9 @@ class PericardiumAssessment(BaseModel):
         description="Assessment of constrictive pericarditis"
     )
 
-# ── Pericardium Measurement Models ─────────────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Pericardium Measurement Models
+#------------------------------------------------------------------------------
 class EffusionSizeMeasurement(BaseModel):
     """Quantitative measurements of effusion size."""
     model_config = common_model_config
@@ -1541,7 +1588,9 @@ class EffusionSizeMeasurement(BaseModel):
         except Exception:
             return "Not Measured"
 
-# ── Full Pericardium Measurements Root ─────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Full Pericardium Measurements Root
+#------------------------------------------------------------------------------
 class PericardiumMeasurements(BaseModel):
     """Quantitative measurements related to the pericardium."""
     model_config = common_model_config
@@ -1582,7 +1631,9 @@ class PericardiumMeasurements(BaseModel):
 
 
 
-# ── Shared Enums ───────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Shared Enums
+#------------------------------------------------------------------------------
 class PresenceEnum(str, Enum):
     YES = "Yes"
     NO = "No"
@@ -1612,8 +1663,12 @@ class FunctionEnum(str, Enum):
     NOT_ASSESSED = "Not Assessed"
 
 
-# ── Mitral Valve ───────────────────────────────────────────────────────────────
-# ── Mitral Enums ───────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Mitral Valve
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+# Mitral Enums
+#------------------------------------------------------------------------------
 class MitralShapeEnum(str, Enum):
     NORMAL = "Normal"
     THICKENED = "Thickened"
@@ -1632,7 +1687,9 @@ class SAMEnum(str, Enum):
     NOT_ASSESSED = "Not Assessed"
 
 
-# ── Mitral Valve Assessment Models ─────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Mitral Valve Assessment Models
+#------------------------------------------------------------------------------
 class MitralStenosis(BaseModel):
     """Model for mitral stenosis assessment."""
     model_config = common_model_config
@@ -1681,7 +1738,9 @@ class MitralProsthetic(BaseModel):
     )
 
 
-# ── Full Mitral Valve Assessment Root ───────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Full Mitral Valve Assessment Root
+#------------------------------------------------------------------------------
 class MitralValveAssessment(BaseModel):
     """Overall assessment of the mitral valve."""
     model_config = common_model_config
@@ -1709,7 +1768,9 @@ class MitralValveAssessment(BaseModel):
     )
 
 
-# ── Mitral Valve Measurements ───────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Mitral Valve Measurements
+#------------------------------------------------------------------------------
 class MitralDimensions(BaseModel):
     """Quantitative measurements of mitral valve dimensions."""
     model_config = common_model_config
@@ -2012,7 +2073,9 @@ class AnnulusMotion(BaseModel):
             return "Not Measured"
 
 
-# ── Final MitralValveMeasurements Root ──────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Final MitralValveMeasurements Root
+#------------------------------------------------------------------------------
 class MitralValveMeasurements(BaseModel):
     """Quantitative measurements related to the mitral valve."""
     model_config = common_model_config
@@ -2067,7 +2130,9 @@ class MitralValveMeasurements(BaseModel):
             return "Not Measured"
 
 
-# ── Mitral Valve Root ───────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Mitral Valve Root
+#------------------------------------------------------------------------------
 class MitralValve(BaseModel):
     """Top-level model for the mitral valve section of the echo report."""
     model_config = common_model_config
@@ -2084,8 +2149,12 @@ class MitralValve(BaseModel):
 
 
 
-# ── Tricuspid Valve ───────────────────────────────────────────────────────────────
-# ── Tricuspid Enums ─────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Tricuspid Valve
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+# Tricuspid Enums
+#------------------------------------------------------------------------------
 class TricuspidShapeEnum(str, Enum):
     NORMAL = "Normal"
     MALCOAPTED = "Malcoapted"
@@ -2097,7 +2166,9 @@ class TricuspidShapeEnum(str, Enum):
     NOT_ASSESSED = "Not Assessed"
 
 
-# ── Tricuspid Valve Assessment Models ─────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Tricuspid Valve Assessment Models
+#------------------------------------------------------------------------------
 class TricuspidStenosis(BaseModel):
     """Model for tricuspid stenosis assessment."""
     model_config = common_model_config
@@ -2146,7 +2217,9 @@ class TricuspidProsthetic(BaseModel):
     )
 
 
-# ── Full TricuspidValveAssessment Root ─────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Full TricuspidValveAssessment Root
+#------------------------------------------------------------------------------
 class TricuspidValveAssessment(BaseModel):
     """Overall assessment of the tricuspid valve."""
     model_config = common_model_config
@@ -2169,7 +2242,9 @@ class TricuspidValveAssessment(BaseModel):
     )
 
 
-# ── Tricuspid Valve Measurements Models ───────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Tricuspid Valve Measurements Models
+#------------------------------------------------------------------------------
 class TricuspidDimensions(BaseModel):
     """Quantitative measurements of tricuspid valve dimensions."""
     model_config = common_model_config
@@ -2365,7 +2440,9 @@ class TricuspidDopplerMeasurements(BaseModel):
         raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
 
 
-# ── Full Tricuspid Valve Measurements Root ─────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Full Tricuspid Valve Measurements Root
+#------------------------------------------------------------------------------
 class TricuspidValveMeasurements(BaseModel):
     """Quantitative measurements related to the tricuspid valve."""
     model_config = common_model_config
@@ -2391,7 +2468,9 @@ class TricuspidValveMeasurements(BaseModel):
     )
 
 
-# ── Tricuspid Valve Root ───────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Tricuspid Valve Root
+#------------------------------------------------------------------------------
 class TricuspidValve(BaseModel):
     """Top-level model for the tricuspid valve section of the echo report."""
     model_config = common_model_config
@@ -2408,8 +2487,12 @@ class TricuspidValve(BaseModel):
 
 
 
-# ── Aortic Valve ───────────────────────────────────────────────────────────────
-# ── Aortic Enums ─────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Aortic Valve
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+# Aortic Enums
+#------------------------------------------------------------------------------
 class AorticShapeEnum(str, Enum):
     NORMAL = "Normal"
     THICKENED = "Thickened"
@@ -2422,7 +2505,10 @@ class AorticShapeEnum(str, Enum):
     NOT_ASSESSED = "Not Assessed"
 
 
-# ── Aortic Valve Assessment Models ─────────────────────────────────────────────
+
+#------------------------------------------------------------------------------
+# Aortic Valve Assessment Models
+#------------------------------------------------------------------------------
 class AorticStenosis(BaseModel):
     """Model for aortic stenosis assessment."""
     model_config = common_model_config
@@ -2468,7 +2554,9 @@ class AorticProsthetic(BaseModel):
         description="Function of the aortic prosthetic valve"
     )
 
-# ── Full Aortic Valve Assessment Root ─────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Full Aortic Valve Assessment Root
+#------------------------------------------------------------------------------
 class AorticValveAssessment(BaseModel):
     """Overall assessment of the aortic valve."""
     model_config = common_model_config
@@ -2490,7 +2578,9 @@ class AorticValveAssessment(BaseModel):
         description="Aortic prosthetic valve assessment"
     )
 
-# ── Aortic Valve Measurements ───────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Aortic Valve Measurements
+#------------------------------------------------------------------------------
 class AorticRegurgitationParameters(BaseModel):
     """Quantitative measurements related to aortic regurgitation."""
     model_config = common_model_config
@@ -2636,7 +2726,9 @@ class AorticDopplerMeasurements(BaseModel):
             return "Not Measured"
 
 
-# ── Full AorticValveMeasurements Root ─────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Full AorticValveMeasurements Root
+#------------------------------------------------------------------------------
 class AorticValveMeasurements(BaseModel):
     """Quantitative measurements related to the aortic valve."""
     model_config = common_model_config
@@ -2682,7 +2774,9 @@ class AorticValveMeasurements(BaseModel):
         raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
 
 
-# ── Aortic Valve Root ───────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Aortic Valve Root
+#------------------------------------------------------------------------------
 class AorticValve(BaseModel):
     """Top-level model for the aortic valve section of the echo report."""
     model_config = common_model_config
@@ -2699,8 +2793,12 @@ class AorticValve(BaseModel):
 
 
 
-# ── Pulmonary Valve ───────────────────────────────────────────────────────────────
-# ── Pulmonary Enums ─────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Pulmonary Valve
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+# Pulmonary Enums
+#------------------------------------------------------------------------------
 class PulmonaryShapeEnum(str, Enum):
     NORMAL = "Normal"
     THICKENED = "Thickened"
@@ -2712,7 +2810,9 @@ class PulmonaryShapeEnum(str, Enum):
     NOT_ASSESSED = "Not Assessed"
 
 
-# ── Pulmonary Valve Assessment Models ─────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Pulmonary Valve Assessment Models
+#------------------------------------------------------------------------------
 class PulmonaryStenosis(BaseModel):
     """Model for pulmonary stenosis assessment."""
     model_config = common_model_config
@@ -2759,7 +2859,9 @@ class PulmonaryProsthetic(BaseModel):
     )
 
 
-# ── Full PulmonaryValveAssessment Root ─────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Full PulmonaryValveAssessment Root
+#------------------------------------------------------------------------------
 class PulmonaryValveAssessment(BaseModel):
     """Overall assessment of the pulmonary valve."""
     model_config = common_model_config
@@ -2782,7 +2884,9 @@ class PulmonaryValveAssessment(BaseModel):
     )
 
 
-# ── Pulmonary Valve Measurements ───────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Pulmonary Valve Measurements
+#------------------------------------------------------------------------------
 class PulmonaryDimensions(BaseModel):
     """Quantitative measurements of pulmonary artery dimensions."""
     model_config = common_model_config
@@ -2996,7 +3100,9 @@ class PulmonaryHemodynamicPressures(BaseModel):
         raise ValueError(f"{info.field_name} value must be a number or 'Not Measured'")
 
 
-# ── Full PulmonaryValveMeasurements Root ─────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Full PulmonaryValveMeasurements Root
+#------------------------------------------------------------------------------
 class PulmonaryValveMeasurements(BaseModel):
     """Quantitative measurements related to the pulmonary valve."""
     model_config = common_model_config
@@ -3024,7 +3130,9 @@ class PulmonaryValveMeasurements(BaseModel):
     )
 
 
-# ── Pulmonary Valve Root ───────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Pulmonary Valve Root
+#------------------------------------------------------------------------------
 class PulmonaryValve(BaseModel):
     """Top-level model for the pulmonary valve section of the echo report."""
     model_config = common_model_config
@@ -3056,8 +3164,12 @@ class PulmonaryValve(BaseModel):
 
 
 
-# ── Aorta ───────────────────────────────────────────────────────────────
-# ── Aorta Enums ───────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Aorta
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+# Aorta Enums
+#------------------------------------------------------------------------------
 class AortaMorphologySegmentEnum(str, Enum):
     """Enumeration for aortic segments assessed for morphology."""
     ASCENDING_AORTA = "Ascending Aorta"
@@ -3118,7 +3230,9 @@ class AortaMeasurementSegmentEnum(str, Enum):
     NOT_MEASURED = "Not Measured" 
 
 
-# ── Aorta Assessment Models ─────────────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Aorta Assessment Models
+#------------------------------------------------------------------------------
 class AortaSegmentMorphology(BaseModel):
     """Model for morphology assessment of a specific aortic segment."""
     model_config = common_model_config
@@ -3167,7 +3281,9 @@ class AortaAssessment(BaseModel):
         description="Right-sided aortic arch anatomical variant"
     )
 
-# ── Aorta Measurement Models ─────────────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Aorta Measurement Models
+#------------------------------------------------------------------------------
 class AortaSegmentDimension(BaseModel):
     """Model for quantitative dimension measurement of a specific aortic segment."""
     model_config = common_model_config
@@ -3248,7 +3364,9 @@ class AortaMeasurements(BaseModel):
     )
 
 
-# ── Aorta Root ───────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Aorta Root
+#------------------------------------------------------------------------------
 class Aorta(BaseModel):
     """Top-level model for the aorta section of the echo report."""
     model_config = common_model_config
@@ -3269,8 +3387,12 @@ class Aorta(BaseModel):
 
 
 
-# ── Pulmonic Vein ───────────────────────────────────────────────────────────────
-# ── Pulmonic Vein Enums ───────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Pulmonic Vein
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+# Pulmonic Vein Enums
+#------------------------------------------------------------------------------
 class PulmonicVeinVenousDrainageEnum(str, Enum):
     """Enumeration for pulmonary venous drainage pattern."""
     NORMAL = "Normal"
@@ -3286,7 +3408,9 @@ class PulmonicVeinInflowPatternEnum(str, Enum):
     SYSTOLIC_FLOW_REVERSAL = "Systolic Flow Reversal"
     NOT_ASSESSED = "Not Assessed"
 
-# ── Pulmonic Vein Assessment Models ───────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Pulmonic Vein Assessment Models
+#------------------------------------------------------------------------------
 class PulmonicVeinAssessment(BaseModel):
     """Overall assessment of the pulmonic veins."""
     model_config = common_model_config
@@ -3300,7 +3424,9 @@ class PulmonicVeinAssessment(BaseModel):
         description="Pulmonary vein flow pattern based on spectral Doppler (S and D wave relationship)"
     )
 
-# ── Pulmonic Vein Measurement Models ───────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Pulmonic Vein Measurement Models
+#------------------------------------------------------------------------------
 class PulmonicVeinDopplerMeasurements(BaseModel):
     """Quantitative Doppler measurements for pulmonic veins."""
     model_config = common_model_config
@@ -3367,7 +3493,9 @@ class PulmonicVeinMeasurements(BaseModel):
             return "Not Measured"
 
 
-# ── Pulmonic Vein Root ───────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# Pulmonic Vein Root
+#------------------------------------------------------------------------------
 class PulmonicVein(BaseModel):
     """Top-level model for the pulmonic vein section of the echo report."""
     model_config = common_model_config
@@ -3386,8 +3514,12 @@ class PulmonicVein(BaseModel):
 
 
 
-# ── IVC ───────────────────────────────────────────────────────────────
-# ── IVC Enums ───────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# IVC
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+# IVC Enums
+#------------------------------------------------------------------------------
 class IVCSizeEnum(str, Enum):
     """Enumeration for Inferior Vena Cava size assessment."""
     NORMAL = "Normal"
@@ -3419,7 +3551,9 @@ class IVCSniffTestResultEnum(str, Enum):
     NOT_PERFORMED = "Not Performed"
     NOT_ASSESSED = "Not Assessed"
 
-# ── IVC Assessment Models ───────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# IVC Assessment Models
+#------------------------------------------------------------------------------
 class IVCAssessment(BaseModel):
     """Overall assessment of the IVC."""
     model_config = common_model_config
@@ -3441,7 +3575,9 @@ class IVCAssessment(BaseModel):
         description="Visual result of IVC collapse with a sniff maneuver"
     )
 
-# ── IVC Measurement Models ───────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# IVC Measurement Models
+#------------------------------------------------------------------------------
 class IVCMeasurements(BaseModel):
     """Quantitative measurements related to the IVC."""
     model_config = common_model_config
@@ -3486,7 +3622,9 @@ class IVCMeasurements(BaseModel):
             return "Not Measured"
 
 
-# ── IVC Root ───────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# IVC Root
+#------------------------------------------------------------------------------
 class IVC(BaseModel):
     """Top-level model for the IVC section of the echo report."""
     model_config = common_model_config
@@ -3507,7 +3645,9 @@ class IVC(BaseModel):
 
 
 
-# ── VSD Enums ─────────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# VSD Enums
+#------------------------------------------------------------------------------
 class VSDPresenceEnum(str, Enum):
     """Enumeration for VSD presence assessment."""
     YES = "Yes"
@@ -3554,7 +3694,9 @@ class VSDAssociatedDefectsEnum(str, Enum):
     OTHER = "Other"
     NOT_ASSESSED = "Not Assessed"
 
-# ── VSD Assessment Models ─────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# VSD Assessment Models
+#------------------------------------------------------------------------------
 class VSDAssessment(BaseModel):
     """Model for VSD assessment details."""
     model_config = common_model_config
@@ -3584,7 +3726,9 @@ class VSDAssessment(BaseModel):
         description="Associated structural cardiac anomalies"
     )
 
-# ── VSD Measurement Models ─────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# VSD Measurement Models
+#------------------------------------------------------------------------------
 class VSDMeasurements(BaseModel):
     """Quantitative measurements related to the VSD."""
     model_config = common_model_config
@@ -3665,7 +3809,9 @@ class VSDMeasurements(BaseModel):
         raise ValueError("Qp/Qs value must be a number or 'Not Measured'")
 
 
-# ── VSD Root ─────────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# VSD Root
+#------------------------------------------------------------------------------
 class VSD(BaseModel):
     """Top-level model for the VSD section of the echo report."""
     model_config = common_model_config
@@ -3684,7 +3830,9 @@ class VSD(BaseModel):
 
 
 
-# ── ASD Enums ─────────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# ASD Enums
+#------------------------------------------------------------------------------
 class ASDPresenceEnum(str, Enum):
     """Enumeration for ASD presence assessment."""
     YES = "Yes"
@@ -3728,7 +3876,9 @@ class ASDAssociatedDefectsEnum(str, Enum):
     OTHER = "Other"
     NOT_ASSESSED = "Not Assessed"
 
-# ── ASD Assessment Models ─────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# ASD Assessment Models
+#------------------------------------------------------------------------------
 class ASDAssessment(BaseModel):
     """Model for ASD assessment details."""
     model_config = common_model_config
@@ -3758,7 +3908,9 @@ class ASDAssessment(BaseModel):
         description="Associated structural cardiac anomalies"
     )
 
-# ── ASD Measurement Models ─────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# ASD Measurement Models
+#------------------------------------------------------------------------------
 class ASDMeasurements(BaseModel):
     """Quantitative measurements related to the ASD."""
     model_config = common_model_config
@@ -3839,7 +3991,9 @@ class ASDMeasurements(BaseModel):
         raise ValueError("Qp/Qs value must be a number or 'Not Measured'")
 
 
-# ── ASD Root ─────────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# ASD Root
+#------------------------------------------------------------------------------
 class ASD(BaseModel):
     """Top-level model for the ASD section of the echo report."""
     model_config = common_model_config
@@ -3858,7 +4012,9 @@ class ASD(BaseModel):
 
 
 
-# ── PFO Enums ─────────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# PFO Enums
+#------------------------------------------------------------------------------
 class PFOPresenceEnum(str, Enum):
     """Enumeration for PFO presence assessment."""
     YES = "Yes"
@@ -3901,7 +4057,9 @@ class PFOAssociatedDefectsEnum(str, Enum):
     OTHER = "Other"
     NOT_ASSESSED = "Not Assessed"
 
-# ── PFO Assessment Models ─────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# PFO Assessment Models
+#------------------------------------------------------------------------------
 class PFOAssessment(BaseModel):
     """Model for PFO assessment details."""
     model_config = common_model_config
@@ -3931,7 +4089,9 @@ class PFOAssessment(BaseModel):
         description="Other structural anomalies associated with PFO"
     )
 
-# ── PFO Measurement Models ─────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# PFO Measurement Models
+#------------------------------------------------------------------------------
 class PFOMeasurements(BaseModel):
     """Quantitative measurements related to the PFO."""
     model_config = common_model_config
@@ -3975,7 +4135,9 @@ class PFOMeasurements(BaseModel):
             return "Not Measured"
 
 
-# ── PFO Root ─────────────────────────────────────────────────────────────────
+#------------------------------------------------------------------------------
+# PFO Root
+#------------------------------------------------------------------------------
 class PFO(BaseModel):
     """Top-level model for the PFO section of the echo report."""
     model_config = common_model_config
@@ -4005,6 +4167,9 @@ class PFO(BaseModel):
 
 
 
+#------------------------------------------------------------------------------
+# Cardiac Chambers
+#------------------------------------------------------------------------------
 class CardiacChambers(BaseModel):
     model_config = common_model_config
 
@@ -4014,6 +4179,9 @@ class CardiacChambers(BaseModel):
     Right_Atrium: RightAtrium = Field(..., description="Right Atrium assessments and measurements")
 
 
+#------------------------------------------------------------------------------
+# Valvular Apparatus
+#------------------------------------------------------------------------------
 class ValvularApparatus(BaseModel):
     model_config = common_model_config
 
@@ -4022,6 +4190,9 @@ class ValvularApparatus(BaseModel):
     Pulmonary_Valve: PulmonaryValve = Field(..., description="Pulmonary valve assessments and measurements")
     Tricuspid_Valve: TricuspidValve = Field(..., description="Tricuspid valve assessments and measurements")
 
+#------------------------------------------------------------------------------
+# Great Vessels and Venous Return
+#------------------------------------------------------------------------------
 class GreatVesselsAndVenousReturn(BaseModel):
     model_config = common_model_config
 
@@ -4029,6 +4200,9 @@ class GreatVesselsAndVenousReturn(BaseModel):
     pulmonic_vein: PulmonicVein = Field(..., description="Pulmonic Vein assessments and measurements")
     ivc: IVC = Field(..., description="Inferior Vena Cava assessments and measurements")
 
+#------------------------------------------------------------------------------
+# Congenital and Structural Defects
+#------------------------------------------------------------------------------
 class CongenitalAndStructuralDefects(BaseModel):
     model_config = common_model_config
 
@@ -4036,6 +4210,9 @@ class CongenitalAndStructuralDefects(BaseModel):
     asd:ASD = Field(..., description="Atrial Septal Defect Assessments and Measurements")
     pfo:PFO = Field(..., description="Patent Foramen Ovale Assessments and Measurements")
 
+#------------------------------------------------------------------------------
+# Pericardium
+#------------------------------------------------------------------------------
 class Pericardium(BaseModel):
     """Top-level model for the pericardium section of the echo report."""
     model_config = common_model_config
@@ -4050,6 +4227,9 @@ class Pericardium(BaseModel):
     )
 
 
+#------------------------------------------------------------------------------
+# Echo Report
+#------------------------------------------------------------------------------
 class EchoReport(BaseModel):
     """Root model representing the extracted echo report data."""
     model_config = common_model_config

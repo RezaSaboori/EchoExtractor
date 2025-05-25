@@ -35,16 +35,21 @@ from echo_extraction.models import (
 )
 from echo_extraction.llm_mapping_utils import remap_llm_keys
 
+
+
 # Load environment variables
 load_dotenv()
+LOG_FILE_DIR = os.getenv("LOG_FILE_DIR", "main_app/logs")
+FINAL_REPORTS_DIR = os.getenv("FINAL_REPORTS_DIR", "main_app/final_reports")
+ABBREVIATION_CSV_PATH = os.getenv("ABBREVIATION_CSV_PATH", "main_app/echo_extraction/echo_abb_merged_csv.csv")
+REPORTS_JSON_PATH = os.getenv("REPORTS_JSON_PATH", "main_app/CTICI_NCIBB_Echo_Sample.json")
 
-# Define directories and paths
-LOG_FILE_DIR = os.getenv("LOG_FILE_DIR", "/storage03/Saboori/Echo/Extractor/main_app/logs")
-FINAL_REPORTS_DIR = os.getenv("FINAL_REPORTS_DIR", "/storage03/Saboori/Echo/Extractor/main_app/final_reports")
-ABBREVIATION_CSV_PATH = os.getenv("ABBREVIATION_CSV_PATH", "/storage03/Saboori/Echo/Extractor/main_app/echo_extraction/echo_abb_merged_csv.csv")
-REPORTS_JSON_PATH = os.getenv("REPORTS_JSON_PATH", "/storage03/Saboori/Echo/Extractor/main_app/CTICI_NCIBB_Echo_Sample.json")
+
 
 logger = logging.getLogger(__name__)
+
+
+
 
 def process_report(report_text: str, abbrev_dict: Dict[str, str]) -> EchoReport:
     """Process a single echo report and return the final structured report."""
@@ -166,7 +171,7 @@ if __name__ == "__main__":
     if not is_langchain_available():
         print("\nLangchain components not available. Please install langchain-community and langchain-core (`pip install langchain-community langchain-core`) and ensure Ollama is running with the 'cogito:70b' model.")
     else:
-        # Load abbreviation dictionary once
+        # Load abbreviation dictionary 
         abbrev_dict = abbreviation_processor.get_abbreviation_dictionary(ABBREVIATION_CSV_PATH)
 
         # Load reports from JSON
@@ -181,7 +186,6 @@ if __name__ == "__main__":
         os.makedirs(LOG_FILE_DIR, exist_ok=True)
         os.makedirs(FINAL_REPORTS_DIR, exist_ok=True)
 
-        # Set up initial logging (console only)
         setup_logging()
 
         # Process each report

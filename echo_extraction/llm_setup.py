@@ -1,25 +1,20 @@
-# echo_extraction/llm_setup.py
-
 import logging
 import json
 import os
 from typing import Dict, Any, Type, Union
 from dotenv import load_dotenv
-
-# Attempt to import Langchain components and JsonOutputParser
 try:
-    # Use the updated import for Ollama from langchain_community
     from langchain_community.llms import Ollama
     from langchain_core.prompts import PromptTemplate
-    from langchain_core.output_parsers import JsonOutputParser # Import JsonOutputParser
-    from langchain_core.runnables import RunnableSequence # Explicitly import RunnableSequence
-    from pydantic import BaseModel # Import BaseModel for type hinting
+    from langchain_core.output_parsers import JsonOutputParser 
+    from langchain_core.runnables import RunnableSequence 
+    from pydantic import BaseModel
+
 
     LANGCHAIN_AVAILABLE = True
 except ImportError:
     logging.warning("Langchain components or JsonOutputParser not found. LLM functionality will be disabled.")
     LANGCHAIN_AVAILABLE = False
-    # Define dummy classes if Langchain is not available
     class Ollama:
         def __init__(self, *args, **kwargs):
             pass
@@ -28,30 +23,32 @@ except ImportError:
     class PromptTemplate:
         def __init__(self, *args, **kwargs):
             pass
-    class JsonOutputParser: # Dummy parser
+    class JsonOutputParser: 
         def parse(self, text: str) -> Dict[str, Any]:
             raise NotImplementedError("Langchain is not installed.")
-    class RunnableSequence: # Dummy RunnableSequence
+    class RunnableSequence: 
         def __init__(self, *args, **kwargs):
             pass
         def invoke(self, *args, **kwargs):
             raise NotImplementedError("Langchain is not installed.")
-    class BaseModel: # Dummy BaseModel
+    class BaseModel: 
         pass
 
-# Load environment variables from .env file
+
+
 load_dotenv()
 
-# Define directories and paths
 LOG_FILE_DIR = os.getenv("LOG_FILE_DIR", "/your/actual/path/to/logs")
 FINAL_REPORTS_DIR = os.getenv("FINAL_REPORTS_DIR", "/your/actual/path/to/final_reports")
 ABBREVIATION_CSV_PATH = os.getenv("ABBREVIATION_CSV_PATH", "/your/actual/path/to/echo_abb_merged_csv.csv")
 REPORTS_JSON_PATH = os.getenv("REPORTS_JSON_PATH", "/your/actual/path/to/CTICI_NCIBB_Echo_Sample.json")
 ABBREVIATIONS_OUTPUT_JSON_PATH = os.getenv("ABBREVIATIONS_OUTPUT_JSON_PATH", "/your/actual/path/to/abbreviations.json")
 
-# ── LLM Initialization ───────────────────────────────────────────────────────
-# Initialize the main extraction LLM
-# Using cogito:70b as specified, ensure it's pulled and running
+
+#------------------------------------------------------------------------------
+# LLM Initialization
+#------------------------------------------------------------------------------
+
 try:
     ollama_model_name = os.getenv("OLLAMA_MODEL_NAME", "your_ollama_model")
     ollama_base_url = os.getenv("OLLAMA_BASE_URL") 
@@ -66,15 +63,17 @@ except Exception as e:
     logging.error(f"Failed to initialize Ollama models: {e}")
     main_extraction_llm = None
     feedback_llm = None
-    LANGCHAIN_AVAILABLE = False # Disable if LLM initialization fails
+    LANGCHAIN_AVAILABLE = False 
 
-# Initialize the JsonOutputParser
-json_parser = JsonOutputParser() if LANGCHAIN_AVAILABLE else JsonOutputParser() # Use dummy if not available
+json_parser = JsonOutputParser() if LANGCHAIN_AVAILABLE else JsonOutputParser() 
 
-# ── Prompt Templates ─────────────────────────────────────────────────────────
 
-# Prompt for the main extraction LLM - expects report, feedback, schema, AND schema_name
-# Modified to accept a specific component schema and its name
+
+
+
+#------------------------------------------------------------------------------
+# Prompt Templates
+#------------------------------------------------------------------------------
 main_extraction_prompt = PromptTemplate(
     input_variables=["report", "feedback", "schema", "schema_name"],
     template="""
@@ -108,9 +107,7 @@ Output JSON:
 """.strip() # Keep the start of the JSON structure in the prompt
 )
 
-# Prompt for the Feedback Agent LLM
 feedback_agent_prompt = PromptTemplate(
-    # Added 'report' to input_variables
     input_variables=["report", "raw_llm_output", "error_details"],
     template="""
 You are a feedback agent for another Agent that extracts structured data from echo reports into JSON.
@@ -151,14 +148,15 @@ Example Feedback Points (Adapt to specific errors and schema):
 """.strip()
 )
 
-# ── Runnable Chains ────────────────────────────────────────────────────────
-# Chain for the main extraction LLM (Prompt -> LLM)
-main_extraction_chain = main_extraction_prompt | main_extraction_llm if LANGCHAIN_AVAILABLE else None
 
-# Chain for the Feedback Agent LLM (Prompt -> LLM)
+
+
+#------------------------------------------------------------------------------
+# Runnable Chains
+#------------------------------------------------------------------------------
+main_extraction_chain = main_extraction_prompt | main_extraction_llm if LANGCHAIN_AVAILABLE else None
 feedback_agent_chain = feedback_agent_prompt | feedback_llm if LANGCHAIN_AVAILABLE else None
 
-# ── Helper Function to get chains ──────────────────────────────────────────
 def get_extraction_chain() -> Union[RunnableSequence, None]:
     """Returns the main extraction Langchain runnable chain."""
     if not LANGCHAIN_AVAILABLE:
@@ -176,7 +174,6 @@ def get_feedback_chain() -> Union[RunnableSequence, None]:
 def get_json_parser() -> Union[JsonOutputParser, None]:
     """Returns the JsonOutputParser instance."""
     if not LANGCHAIN_AVAILABLE:
-          # Return the dummy parser if Langchain is not available
           return JsonOutputParser()
     return json_parser
 

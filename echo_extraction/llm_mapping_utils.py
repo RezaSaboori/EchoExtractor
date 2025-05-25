@@ -2,7 +2,6 @@ import re
 import logging
 from typing import Any, Dict, List, Union, Optional
 
-# Get a logger for this module
 logger = logging.getLogger(__name__)
 
 def normalize_key(key: str) -> str:
@@ -62,10 +61,9 @@ def remap_llm_keys(data: Union[Dict, List, Any],
         field_info = current_model_fields.get(model_field_name) # Get FieldInfo for the target model field
 
         if field_info:
-            # Pydantic v2 uses 'annotation' on FieldInfo objects
             field_annotation = getattr(field_info, 'annotation', None)
             if field_annotation:
-                if hasattr(field_annotation, '__fields__'): # Annotation is a Pydantic model itself
+                if hasattr(field_annotation, '__fields__'): 
                     subfields_for_next_recursion = field_annotation.__fields__
                     logger.debug(f"      Subfields for '{model_field_name}' (type: Pydantic Model {field_annotation.__name__}): {list(subfields_for_next_recursion.keys())}")
                 else: # Check if annotation is List[PydanticModel] or similar
@@ -82,7 +80,6 @@ def remap_llm_keys(data: Union[Dict, List, Any],
         elif (isinstance(llm_value, dict) or isinstance(llm_value, list)):
             logger.debug(f"    Field '{model_field_name}' (from llm_key '{llm_key}') not found in current_model_fields. Cannot determine subfields for recursion if value is dict/list.")
 
-        # Recursive call for the value
         remapped_dict[model_field_name] = remap_llm_keys(llm_value, subfields_for_next_recursion)
     
     logger.debug(f"  Remapped dictionary for current level: {remapped_dict}")

@@ -1,15 +1,8 @@
-# echo_extraction/schema_helpers.py
-
 import json
 import copy
 import textwrap
 from typing import Dict, Any, List, Union
 
-# ── Schema Resolution Helpers (resolve_ref, recursively_resolve_refs, get_schema_snippet) ──
-# These functions (resolve_ref, recursively_resolve_refs, get_schema_snippet)
-# remain unchanged as they are general schema utilities.
-# Make sure they are correctly implemented as per your existing project.
-# For brevity, I'm not re-listing them here but they are essential.
 
 def resolve_ref(schema: Dict[str, Any], ref: str) -> Dict[str, Any]:
     """Resolves a JSON schema $ref pointer within the same schema document."""
@@ -67,9 +60,6 @@ def get_schema_snippet(schema: Dict[str, Any], loc: tuple, max_resolve_depth: in
     original_schema = schema 
 
     if isinstance(current_schema, dict) and 'properties' in current_schema:
-        # This was an attempt to auto-navigate into 'properties', but Pydantic's loc
-        # usually starts from a field name that IS a key in 'properties' or a root definition.
-        # Let's adjust to be more flexible.
         pass
 
     for i, part in enumerate(loc):
@@ -84,7 +74,6 @@ def get_schema_snippet(schema: Dict[str, Any], loc: tuple, max_resolve_depth: in
 
         # Navigate based on the current part of the location (loc)
         if isinstance(part, str):
-            # Check if 'part' is a direct key or needs to be found in 'properties'
             if isinstance(current_schema, dict) and part in current_schema:
                  current_schema = current_schema[part]
             elif isinstance(current_schema, dict) and 'properties' in current_schema and part in current_schema['properties']:
@@ -162,11 +151,9 @@ def format_validation_errors_for_agent(errors: List[Dict[str, Any]], schema: Dic
 # ── NEW: Error Formatting for Markdown Book Log ───────────────────────────────
 def format_pydantic_errors_for_book(
     pydantic_errors: List[Dict[str, Any]], 
-    # The schema passed here should ideally be the specific component's schema 
-    # for more relevant snippets, or the full EchoReport schema if navigating from root.
-    # extraction_logic.py now passes component_schema.
+
     relevant_schema: Dict[str, Any], 
-    component_name: str # For context
+    component_name: str #
 ) -> List[Dict[str, Any]]:
     """
     Formats Pydantic validation errors into a list of dictionaries suitable for
