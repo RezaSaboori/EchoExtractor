@@ -38,11 +38,10 @@ except ImportError:
 
 load_dotenv()
 
-LOG_FILE_DIR = os.getenv("LOG_FILE_DIR", "/your/actual/path/to/logs")
-FINAL_REPORTS_DIR = os.getenv("FINAL_REPORTS_DIR", "/your/actual/path/to/final_reports")
-ABBREVIATION_CSV_PATH = os.getenv("ABBREVIATION_CSV_PATH", "/your/actual/path/to/echo_abb_merged_csv.csv")
-REPORTS_JSON_PATH = os.getenv("REPORTS_JSON_PATH", "/your/actual/path/to/CTICI_NCIBB_Echo_Sample.json")
-ABBREVIATIONS_OUTPUT_JSON_PATH = os.getenv("ABBREVIATIONS_OUTPUT_JSON_PATH", "/your/actual/path/to/abbreviations.json")
+LOG_FILE_DIR = os.getenv("LOG_FILE_DIR", "/main_app/logs")
+FINAL_REPORTS_DIR = os.getenv("FINAL_REPORTS_DIR", "/main_app/final_reports")
+ABBREVIATION_CSV_PATH = os.getenv("ABBREVIATION_CSV_PATH", "/main_app/echo_abb_merged_csv.csv")
+REPORTS_JSON_PATH = os.getenv("REPORTS_JSON_PATH", "/main_app/CTICI_NCIBB_Echo_Sample.json")
 
 
 #------------------------------------------------------------------------------
