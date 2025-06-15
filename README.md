@@ -89,12 +89,10 @@ Example `.env` content:
 OLLAMA_MODEL_NAME="your_ollama_model_name:tag"  # e.g., "mistral:latest", "cogito:70b"
 # OLLAMA_BASE_URL="http://localhost:11434"    # Uncomment and set if Ollama runs on a different host/port
 
-# --- File Paths (Defaults are usually fine if running from main_app directory) ---
 LOG_FILE_DIR="./logs"
 FINAL_REPORTS_DIR="./final_reports"
 ABBREVIATION_CSV_PATH="./echo_extraction/echo_abb_merged_csv.csv"
 REPORTS_JSON_PATH="./CTICI_NCIBB_Echo_Sample.json" # Path to the input JSON file with reports
-# ABBREVIATIONS_OUTPUT_JSON_PATH="./abbreviations.json" # Optional: path for an output JSON of abbreviations (if functionality is added)
 ```
 
 **Important**:
